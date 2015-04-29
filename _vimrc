@@ -35,6 +35,9 @@ cmap <C-L> <C-C>:noh<CR>:
 " map mt and mT to move tabs left or right respectively
 nnoremap mt :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap mT :execute 'silent! tabmove ' . tabpagenr()<CR>
+
+" strip white space from line endings on save
+autocmd BufWritePre * %s/\s\+$//e
 " customization ends here
 
 set diffexpr=MyDiff()
