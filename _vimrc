@@ -1,15 +1,13 @@
-set nocompatible
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave xterm
 
-" customization starts here
 colorscheme slate         "change colors
 set gfn=Consolas:h9:cANSI "change font
 set expandtab             "convert \t characters to spaces
 set tabstop=2             "this and the following two lines
 set shiftwidth=2          "set the size of 'tabs' to 2 spaces
-set softtabstop=2         "
+set softtabstop=2
 set cindent               "enable C style indentation
 set cinkeys-=0#           "don't reset '#' comment lines to 0 indentation
 set indentkeys-=0#        "don't reset '#' comment lines to 0 indentation
@@ -19,12 +17,6 @@ set foldignore=           "was '#' allow comment folding
 set clipboard=unnamed     "use windows' clipboard???
 set guioptions-=m         "remove menu bar
 set guioptions-=T         "remove toolbar
-
-" map ctrl+w to tab close
-nnoremap <C-W> :tabclose<CR>
-vnoremap <C-W> <C-C>:tabclose<CR>
-inoremap <C-W> <C-C>:tabclose<CR>
-cnoremap <C-W> <C-C>:tabclose<CR>
 
 " map ctrl+l to remove highlighting
 nmap <C-L> :noh<CR>
@@ -37,31 +29,20 @@ nnoremap mt :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap mT :execute 'silent! tabmove ' . tabpagenr()<CR>
 
 " strip white space from line endings on save
-autocmd BufWritePre * %s/\s\+$//e
-" customization ends here
+autocmd BufWritePre * call StaticViewCall('%s/\s\+$//e')
 
-set diffexpr=MyDiff()
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+" if you want to run some command that moves the screen or unfolds folds
+" but you want the screen and cursor in their original positions when
+" you're done, then you can use this?
+" cmd is a string that gets passed to execute
+" StacicViewCall(":0")
+" this would bring you to the first line... and then send you right back
+" hopefully we can think of some better uses of this function /:
+function! StaticViewCall(cmd)
+  let screen = winsaveview() " save current screen/cursor state
+  set nofoldenable           " disable folding so folds aren't opened
+  execute a:cmd            | " run the supplied command
+  set foldenable             " reenable folding
+  call winrestview(screen)   " restore screen/cursor state
 endfunction
 
