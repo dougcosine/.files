@@ -1,5 +1,4 @@
 source $VIM/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
 behave xterm
 
 map - <leader>
@@ -39,8 +38,18 @@ set shell=C:/GitBash/sh.exe.lnk\ --login\ -i
 set autochdir
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+" backspace, space, h, and l keys wrap to previous/next line
+set whichwrap+=bshl
 " Don't use Ex mode
 noremap Q <nop>
+" backspace in Visual mode deletes selection
+vnoremap <BS> d
+" Alt-Space is System menu
+if has("gui")
+  noremap <M-Space> :simalt ~<CR>
+  inoremap <M-Space> <C-O>:simalt ~<CR>
+  cnoremap <M-Space> <C-C>:simalt ~<CR>
+endif
 
 " map ctrl+l to remove highlighting
 nnoremap <C-L> :noh<CR>
