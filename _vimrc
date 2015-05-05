@@ -1,4 +1,4 @@
-source $VIMRUNTIME/vimrc_example.vim
+source $VIM/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave xterm
 
@@ -22,17 +22,25 @@ set foldignore=           "was '#' allow comment folding
 set clipboard=unnamed     "use windows' clipboard???
 set guioptions-=m         "remove menu bar
 set guioptions-=T         "remove toolbar
-set guioptions-=r         "remove scroll bars (this and next 3 lines)
-set guioptions-=R         "hopefully this will fix undocking???
-set guioptions-=l
-set guioptions-=L
-set guioptions-=e         "removes gui tab labels (also to fix undocking)
-set relativenumber        "show how many lines away from the cursor each line is
-set numberwidth=2         "set minimum number of columns to display line numbers
+set guioptions-=RrLle     "remove scroll bars and gui tab labels
+set relativenumber        "show how distant from the cursor each line is
+set numberwidth=2         "minimum number of columns to display line numbers
+set shellslash            "use as separator for file paths
+set backup                "keep a backup file
+set history=10000         "keep 50 lines of command line history
+set ruler                 "show the cursor position all the time
+set showcmd               "display incomplete commands
+set incsearch             "do incremental searching
+syntax on                 "switch syntax highlighting on
+set hlsearch              "highlight the last used search pattern
 " use git bash for shell operations, external commands, etc
 set shell=C:/GitBash/sh.exe.lnk\ --login\ -i
-set shellslash
+"use file's location as working directory for shell commands
 set autochdir
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+" Don't use Ex mode
+noremap Q <nop>
 
 " map ctrl+l to remove highlighting
 nnoremap <C-L> :noh<CR>
