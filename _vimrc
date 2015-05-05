@@ -102,23 +102,23 @@ nnoremap <leader>[ viw<esc>a]<esc>hbi[<esc>lel
 nnoremap <leader>{ viw<esc>a}<esc>hbi{<esc>lel
 " move to end of line with L
 noremap  L $
-noremap  $ :echo "use L"<cr>
+noremap  $ :throw "use L"<cr>
 " move to first non whitespace character of line with H
 " if you were already there, move to first character of line
 noremap  H :call LineHome()<cr>:echo<cr>
-noremap  ^ :echo "use H"<cr>
-noremap  0 :echo "use H"<cr>
+noremap  ^ :throw "use H"<cr>
+noremap  0 :throw "use H"<cr>
 " leave insert and visual modes with ,h
 inoremap ,h <esc>l
-inoremap <esc> <c-o>:echoe "use ',h'"<cr>
-inoremap <c-c> <c-o>:echoe "use ',h'"<cr>
+inoremap <esc> <c-o>:throw "use ',h'"<cr>
+inoremap <c-c> <c-o>:throw "use ',h'"<cr>
 vnoremap ,h <esc>l
-vnoremap <esc> <c-c>:echoe "use ',h'"<cr>
-vnoremap <c-c> <c-c>:echoe "use ',h'"<cr>
+vnoremap <esc> <c-c>:throw "use ',h'"<cr>
+vnoremap <c-c> <c-c>:throw "use ',h'"<cr>
 
 " remap <space> to : in mode so it's easier to input commands
 noremap <space> :
-noremap : :echo "use space!"<cr>
+noremap : :throw "use space!"<cr>
 
 iabbrev @@ dougcosine@gmail.com
 iabbrev ssig -- <cr>Doug Coulson<cr>dougcosine@gmail.com
