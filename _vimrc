@@ -133,11 +133,13 @@ noremap  ^ :throw "use H"<cr>
 noremap  0 :throw "use H"<cr>
 " leave insert and visual modes with <leader>c
 inoremap <leader>c <esc>l
-inoremap <esc> <c-o>:throw "use '<leader>c'"<cr>
-inoremap <c-c> <c-o>:throw "use '<leader>c'"<cr>
+inoremap <leader>C <esc>l
+inoremap <esc> <c-o>:throw "use '\<leader>c'"<cr>
+inoremap <c-c> <c-o>:throw "use '\<leader>c'"<cr>
 vnoremap <leader>c <esc>l
-vnoremap <esc> <c-c>:throw "use '<leader>c'"<cr>
-vnoremap <c-c> <c-c>:throw "use '<leader>c'"<cr>
+vnoremap <leader>C <esc>l
+vnoremap <esc> <c-c>:throw "use '\<leader>c'"<cr>
+vnoremap <c-c> <c-c>:throw "use '\<leader>c'"<cr>
 " unmap <leader>c in normal mode
 nnoremap <leader>c <nop>
 
