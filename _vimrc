@@ -1,7 +1,7 @@
 source $VIM/vimrc_example.vim
 behave xterm
 
-map - <leader>
+map - <nop>
 let mapleader = "-"
 map \ <localleader>
 let maplocalleader = "\\"
