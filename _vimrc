@@ -2,7 +2,9 @@ source $VIM/vimrc_example.vim
 behave xterm
 
 map - <leader>
+let mapleader = "-"
 map \ <localleader>
+let maplocalleader = "\\"
 colorscheme slate         "change colors
 " for some reason PreProc(essing) gets highlighted red on white by default.
 " this makes it orange on gray
@@ -21,7 +23,11 @@ set foldignore=           "was '#' allow comment folding
 set clipboard=unnamed     "use windows' clipboard???
 set guioptions-=m         "remove menu bar
 set guioptions-=T         "remove toolbar
-set guioptions-=RrLle     "remove scroll bars and gui tab labels
+set guioptions-=R         "remove scroll bars (next 4 lines)
+set guioptions-=r
+set guioptions-=L
+set guioptions-=l
+set guioptions-=e         "remove gui tab labels
 set relativenumber        "show how distant from the cursor each line is
 set numberwidth=2         "minimum number of columns to display line numbers
 set shellslash            "use as separator for file paths
@@ -39,7 +45,7 @@ set autochdir
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 " backspace, space, h, and l keys wrap to previous/next line
-set whichwrap+=bshl
+set whichwrap+=bs
 " Don't use Ex mode
 noremap Q <nop>
 " backspace in Visual mode deletes selection
@@ -125,13 +131,15 @@ noremap  $ :throw "use L"<cr>
 noremap  H :call LineHome()<cr>:echo<cr>
 noremap  ^ :throw "use H"<cr>
 noremap  0 :throw "use H"<cr>
-" leave insert and visual modes with ,h
-inoremap ,h <esc>l
-inoremap <esc> <c-o>:throw "use ',h'"<cr>
-inoremap <c-c> <c-o>:throw "use ',h'"<cr>
-vnoremap ,h <esc>l
-vnoremap <esc> <c-c>:throw "use ',h'"<cr>
-vnoremap <c-c> <c-c>:throw "use ',h'"<cr>
+" leave insert and visual modes with <leader>c
+inoremap <leader>c <esc>l
+inoremap <esc> <c-o>:throw "use '<leader>c'"<cr>
+inoremap <c-c> <c-o>:throw "use '<leader>c'"<cr>
+vnoremap <leader>c <esc>l
+vnoremap <esc> <c-c>:throw "use '<leader>c'"<cr>
+vnoremap <c-c> <c-c>:throw "use '<leader>c'"<cr>
+" unmap <leader>c in normal mode
+nnoremap <leader>c <nop>
 
 " remap <space> to : in mode so it's easier to input commands
 noremap <space> :
