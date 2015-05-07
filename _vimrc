@@ -132,12 +132,12 @@ noremap  H :call LineHome()<cr>:echo<cr>
 noremap  ^ :throw "use H"<cr>
 noremap  0 :throw "use H"<cr>
 " leave insert and visual modes with <leader>c
-inoremap hc <esc>l
-inoremap <esc> <c-o>:throw "use 'hc'"<cr>
-inoremap <c-c> <c-o>:throw "use 'hc'"<cr>
-vnoremap hc <esc>l
-vnoremap <esc> <c-c>:throw "use 'hc'"<cr>
-vnoremap <c-c> <c-c>:throw "use 'hc'"<cr>
+inoremap hl <esc>l
+inoremap <esc> <c-o>:throw "use 'hl'"<cr>
+inoremap <c-c> <c-o>:throw "use 'hl'"<cr>
+vnoremap hl <esc>
+vnoremap <esc> <c-c>:throw "use 'hl'"<cr>
+vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
 
 " remap <space> to : in mode so it's easier to input commands
 noremap <space> :
