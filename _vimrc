@@ -58,9 +58,9 @@ if has("gui")
 endif
 
 " map ctrl+l to remove highlighting
-nnoremap <C-L> :noh<CR>
-vnoremap <C-L> <C-C>:noh<CR>gv
-inoremap <C-L> <C-O>:noh<CR>a
+nnoremap <c-l> :noh<CR>
+vnoremap <c-l> <c-c>:noh<cr>gv
+inoremap <c-l> <c-o>:noh<cr>
 
 " map forward and backward window switching in normal, visual, command
 " pending, and insert modes
