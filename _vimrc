@@ -1,5 +1,4 @@
-let s:vimrc_ex = expand('<sfile>:p:h') . "/vimrc_example.vim"
-exec "source " . s:vimrc_ex
+exec "source " . expand('<sfile>:p:h') . "/vimrc_example.vim"
 behave xterm
 
 map - <nop>
