@@ -38,8 +38,6 @@ set showcmd               "display incomplete commands
 set incsearch             "do incremental searching
 syntax on                 "switch syntax highlighting on
 set hlsearch              "highlight the last used search pattern
-" use git bash for shell operations, external commands, etc
-set shell=C:/GitBash/sh.exe.lnk\ --login\ -i
 "use file's location as working directory for shell commands
 set autochdir
 " allow backspacing over everything in insert mode
@@ -104,7 +102,7 @@ function! LineHome()
 endfunction
 
 " pathogen
-execute pathogen#infect()
+" execute pathogen#infect()
 
 " mappings from Learn Vimscript the Hard Way
 " move line under cursor down one line
