@@ -1,4 +1,4 @@
-let s:vimrc_ex = expand('<sfile>:p:h') . "\\vimrc_example.vim"
+let s:vimrc_ex = expand('<sfile>:p:h') . "/vimrc_example.vim"
 exec "source " . s:vimrc_ex
 behave xterm
 
