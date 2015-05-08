@@ -1,4 +1,5 @@
-source $VIM/vimrc_example.vim
+let s:vimrc_ex = expand('<sfile>:p:h') . "\\vimrc_example.vim"
+exec "source " . s:vimrc_ex
 behave xterm
 
 map - <nop>
@@ -137,8 +138,10 @@ vnoremap hl <esc>
 vnoremap <esc> <c-c>:throw "use 'hl'"<cr>
 vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
 
-" remap <space> to : in mode so it's easier to input commands
+" map <space> to : in mode so it's easier to input commands
 noremap <space> :
+" map q<space> to q: so we can get to the command editor
+noremap q<space> q:
 noremap : :throw "use space!"<cr>
 
 iabbrev @@ dougcosine@gmail.com
