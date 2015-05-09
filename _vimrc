@@ -56,7 +56,7 @@ if has("gui")
 endif
 
 " map ctrl+l to remove highlighting
-nnoremap <c-l> :noh<CR>
+nnoremap <c-l> :noh<cr>
 vnoremap <c-l> <c-c>:noh<cr>gv
 inoremap <c-l> <c-o>:noh<cr>
 
@@ -130,10 +130,10 @@ noremap  H :call LineHome()<cr>:echo<cr>
 noremap  ^ :throw "use H"<cr>
 noremap  0 :throw "use H"<cr>
 " leave insert and visual modes with <leader>c
-inoremap hl <esc>l
+inoremap hl <esc>l:noh<cr>
 inoremap <esc> <c-o>:throw "use 'hl'"<cr>
 inoremap <c-c> <c-o>:throw "use 'hl'"<cr>
-vnoremap hl <esc>
+vnoremap hl <esc>:noh<cr>
 vnoremap <esc> <c-c>:throw "use 'hl'"<cr>
 vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
 
