@@ -130,6 +130,9 @@ endfunction
   vnoremap hl <esc>:noh<cr>
   vnoremap <esc> <c-c>:throw "use 'hl'"<cr>
   vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
+  " make n always search forward and N always search backward
+  nnoremap <expr> n (v:searchforward ? 'n' : 'N')
+  nnoremap <expr> N (v:searchforward ? 'N' : 'n')
 
 " text movement
   " move line under cursor down one line
