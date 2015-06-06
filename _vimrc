@@ -74,8 +74,18 @@ function! LineHome()
 endfunction
 
 " pathogen
-" execute pathogen#infect()
+execute pathogen#infect()
 
+" EasyMotion
+  " Disable default mappings
+  " let g:EasyMotion_do_mapping = 0
+  nmap m  <Plug>(easymotion-prefix)
+  " nmap ms <Plug>(easymotion-s)
+  " nmap mj <Plug>(easymotion-j)
+  " nmap mk <Plug>(easymotion-k)
+  nmap /  <Plug>(easymotion-sn)
+  map n  <Plug>(easymotion-next)
+  map N  <Plug>(easymotion-prev)
 
 " leaders
   map - <nop>
@@ -92,7 +102,7 @@ endfunction
   endif
 
   " quick edit my vimrc
-  nnoremap <leader>ek :vsplit $MYVIMRC<cr>
+  nnoremap <leader>ek :tabnew $MYVIMRC<cr>
   " quick source my vimrc
   nnoremap <leader>ok :source $MYVIMRC<cr>
 
@@ -103,9 +113,9 @@ endfunction
   noremap : :throw "use space!"<cr>
 
   " map ctrl+l to remove highlighting
-  nnoremap <c-l> :noh<cr>
-  vnoremap <c-l> <c-c>:noh<cr>gv
-  inoremap <c-l> <c-o>:noh<cr>
+  nnoremap <c-l> :noh<cr>:silent! syntax sync fromstart<cr>
+  vnoremap <c-l> <c-c>:noh<cr>:silent! syntax sync fromstart<cr>gv
+  inoremap <c-l> <c-o>:noh<cr>:silent! syntax sync fromstart<cr>
 
   " map forward and backward window switching in normal, visual, command
   " pending, and insert modes
@@ -131,8 +141,10 @@ endfunction
   vnoremap <esc> <c-c>:throw "use 'hl'"<cr>
   vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
   " make n always search forward and N always search backward
-  nnoremap <expr> n (v:searchforward ? 'n' : 'N')
-  nnoremap <expr> N (v:searchforward ? 'N' : 'n')
+  " nnoremap <silent> <expr> n (v:searchforward ?
+  "  \ ':silent! exe "normal nzO<cr>"<cr>' : ':silent! exe "normal NzO<cr>"<cr>')
+  "nnoremap <silent> <expr> N (v:searchforward ?
+  "  \ ':silent! exe "normal NzO<cr>"<cr>' : ':silent! exe "normal nzO<cr>"<cr>')
 
 " text movement
   " move line under cursor down one line
