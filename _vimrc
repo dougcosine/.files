@@ -64,11 +64,23 @@ endfunction
 
 " moves you to the first non whitespace character of the line
 " if you were already there, moves you to the first character if the line
-function! LineHome()
-  let x = col('.')
-  execute "normal! ^"
-  if x == col('.')
-    execute "normal! 0"
+function! LineHome(mode)
+  let isVisual = a:mode == 'v'
+  if isVisual
+    execute "normal! \<esc>"
+    let colCurr = col('.')
+    execute "normal! ^"
+    if colCurr == col('.')
+      execute "normal! gv0"
+    else
+      execute "normal! gv^"
+    endif
+  else
+    let colCurr  = col('.')
+    execute "normal! ^"
+    if colCurr == col('.')
+      execute "normal! 0"
+    endif
   endif
   return ""
 endfunction
@@ -113,6 +125,7 @@ execute pathogen#infect()
   noremap : :throw "use space!"<cr>
 
   " map ctrl+l to remove highlighting
+  nnoremap <esc> :noh<cr>
   nnoremap <c-l> :noh<cr>:silent! syntax sync fromstart<cr>
   vnoremap <c-l> <c-c>:noh<cr>:silent! syntax sync fromstart<cr>gv
   inoremap <c-l> <c-o>:noh<cr>:silent! syntax sync fromstart<cr>
@@ -127,24 +140,25 @@ execute pathogen#infect()
 " cursor movement
   " move to end of line with L
   noremap  L $
-  noremap  $ :throw "use L"<cr>
   " move to first non whitespace character of line with H
   " if you were already there, move to first character of line
-  noremap  H :call LineHome()<cr>:echo<cr>
-  noremap  ^ :throw "use H"<cr>
-  noremap  0 :throw "use H"<cr>
-  " leave insert and visual modes with <leader>c
-  inoremap hl <esc>l:noh<cr>
-  inoremap <esc> <c-o>:throw "use 'hl'"<cr>
-  inoremap <c-c> <c-o>:throw "use 'hl'"<cr>
-  vnoremap hl <esc>:noh<cr>
-  vnoremap <esc> <c-c>:throw "use 'hl'"<cr>
-  vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
+  noremap  H :call LineHome('n')<cr>:echo<cr>
+  vnoremap H :<c-u>call LineHome('v')<cr>
   " make n always search forward and N always search backward
   " nnoremap <silent> <expr> n (v:searchforward ?
   "  \ ':silent! exe "normal nzO<cr>"<cr>' : ':silent! exe "normal NzO<cr>"<cr>')
   "nnoremap <silent> <expr> N (v:searchforward ?
   "  \ ':silent! exe "normal NzO<cr>"<cr>' : ':silent! exe "normal nzO<cr>"<cr>')
+
+" modal operators
+  " leave insert and visual modes with hl or HL
+  inoremap hl <esc>l:noh<cr>
+  inoremap HL <esc>l:noh<cr>
+  inoremap <esc> <esc>l:noh<cr>
+  inoremap <c-c> <c-o>:throw "use 'hl'"<cr>
+  vnoremap hl <esc>:noh<cr>
+  vnoremap <esc> <esc>:noh<cr>
+  vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
 
 " text movement
   " move line under cursor down one line
