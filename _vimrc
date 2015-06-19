@@ -34,6 +34,7 @@
   set ruler                 "show the cursor position all the time
   set showcmd               "display incomplete commands
   set incsearch             "do incremental searching
+  set fileformat=unix       "use unix style line endings
   syntax on                 "switch syntax highlighting on
   set hlsearch              "highlight the last used search pattern
   "use file's location as working directory for shell commands
@@ -152,19 +153,19 @@ execute pathogen#infect()
 
 " modal operators
   " leave insert and visual modes with hl or HL
-  inoremap hl <esc>l:noh<cr>
-  inoremap HL <esc>l:noh<cr>
   inoremap <esc> <esc>l:noh<cr>
-  inoremap <c-c> <c-o>:throw "use 'hl'"<cr>
-  vnoremap hl <esc>:noh<cr>
   vnoremap <esc> <esc>:noh<cr>
-  vnoremap <c-c> <c-c>:throw "use 'hl'"<cr>
 
 " text movement
   " move line under cursor down one line
   nnoremap <leader>- ddp
   " move line under cursor up one line
   nnoremap <leader>_ ddkP
+
+" tabs
+  nnoremap <leader>k gt
+  nnoremap <leader>j gT
+  nnoremap <leader>t :tabnew<space>
 
 " text editing
   " surround word under cursor with various enclosing marks
