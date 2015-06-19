@@ -90,15 +90,33 @@ endfunction
 execute pathogen#infect()
 
 " EasyMotion
-  " Disable default mappings
-  " let g:EasyMotion_do_mapping = 0
+if has("gui_running")
+  let g:EasyMotion_smartcase = 1
+  let g:EasyMotion_leader_key = 'm'
   nmap m  <Plug>(easymotion-prefix)
-  " nmap ms <Plug>(easymotion-s)
-  " nmap mj <Plug>(easymotion-j)
-  " nmap mk <Plug>(easymotion-k)
+  nmap mw <Plug>(easymotion-bd-w)
+  nmap mW <Plug>(easymotion-bd-W)
+  nmap me <Plug>(easymotion-bd-e)
+  nmap mE <Plug>(easymotion-bd-E)
+  nmap mj <Plug>(easymotion-j)
+  nmap mk <Plug>(easymotion-k)
+  nmap ml <Plug>(easymotion-lineforward)
+  nmap mh <Plug>(easymotion-linebackward)
+  nmap my y``
+  nmap mY y''
+  nmap mc c``
+  nmap mC c''
+  nmap md ``d``
+  nmap mD ''d``
+  nmap m= ``=``
+  nmap m> ``>``
+  nmap m< ``<``
+  nmap mgu ``gu``
+  nmap mgU ``gU``
   nmap /  <Plug>(easymotion-sn)
   map n  <Plug>(easymotion-next)
   map N  <Plug>(easymotion-prev)
+endif
 
 " leaders
   map - <nop>
