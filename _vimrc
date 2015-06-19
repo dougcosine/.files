@@ -26,7 +26,6 @@
   set guioptions-=L
   set guioptions-=l
   set guioptions-=e         "remove gui tab labels
-  set relativenumber        "show how distant from the cursor each line is
   set numberwidth=2         "minimum number of columns to display line numbers
   set shellslash            "use as separator for file paths
   set backup                "keep a backup file
@@ -90,7 +89,6 @@ endfunction
 execute pathogen#infect()
 
 " EasyMotion
-if has("gui_running")
   let g:EasyMotion_smartcase = 1
   let g:EasyMotion_leader_key = 'm'
   nmap m  <Plug>(easymotion-prefix)
@@ -116,7 +114,6 @@ if has("gui_running")
   nmap /  <Plug>(easymotion-sn)
   map n  <Plug>(easymotion-next)
   map N  <Plug>(easymotion-prev)
-endif
 
 " leaders
   map - <nop>
