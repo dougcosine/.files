@@ -26,6 +26,7 @@
   set guioptions-=L
   set guioptions-=l
   set guioptions-=e         "remove gui tab labels
+  set formatoptions+=j      "remove comment leader when joining lines
   set numberwidth=2         "minimum number of columns to display line numbers
   set shellslash            "use as separator for file paths
   set backup                "keep a backup file
@@ -42,6 +43,7 @@
   set backspace=indent,eol,start
   " backspace, space, h, and l keys wrap to previous/next line
   set whichwrap+=bs
+  let cobol_legacy_code = 1
 
 " strip white space from line endings on save
 autocmd BufWritePre * call StaticViewCall('%s/\s\+$//e')
