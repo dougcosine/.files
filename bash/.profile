@@ -59,8 +59,7 @@ alias ep="v ~/.profile"
 alias sp="source ~/.profile"
 alias ahk="AutoHotKey.exe"
 alias ahc="/c/Program\ Files/AutoHotkey/Compiler/Ahk2Exe.exe"
-alias gd='git difftool --noprompt --trust-exit-code
-          --extcmd="/c/Users/Counter/Vim/vim74/gvim.exe -d --nofork"'
+alias gd='git difftool --noprompt --extcmd="/c/Users/Counter/Vim/vim74/gvim.exe -d --nofork --servername git-difftool"'
 
 function ahk () { AutoHotKey.exe "$@"; }
 function v () { vim "$@" & disown; }
