@@ -83,7 +83,7 @@ function getConfirmation() {
   message=$1
   read -p "$message" -n 1 -r
   echo
-  if [[ $REPLY =~ ^[Yy]$ ]]
+  if [[ "$REPLY" == "y" ]]
   then
     return 0
   else
