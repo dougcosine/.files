@@ -117,11 +117,28 @@ execute pathogen#infect()
   map n  <Plug>(easymotion-next)
   map N  <Plug>(easymotion-prev)
 
+" diff specific
+  if &diff
+    " if we're in diff mode map ctrl+l to turn off search highlighting,
+    " refresh syntax highlighting, and refresh the diff
+    nnoremap <c-l> :noh<cr>:sil! syn-sync-first<cr>:diffu<cr>
+    vnoremap <c-l> <c-c>:noh<cr>:sil! syn-sync-first<cr>:diffu<cr>gv
+    inoremap <c-l> <c-o>:noh<cr><c-o>:sil! syn-sync-first<cr><c-o>:diffu<cr>
+    " maximize the window
+    au GUIEnter * simalt ~x
+  else
+    " if we're not in diff mode, just map ctrl+l to turn off search
+    " highlighting and refresh syntax highlighting
+    nnoremap <c-l> :noh<cr>:silent! syntax sync fromstart<cr>
+    vnoremap <c-l> <c-c>:noh<cr>:silent! syntax sync fromstart<cr>gv
+    inoremap <c-l> <c-o>:noh<cr><c-o>:silent! syntax sync fromstart<cr>
+  endif
+
 " leaders
-  map - <nop>
-  let mapleader = "-"
-  map \ <localleader>
-  let maplocalleader = "\\"
+  map <space> <leader>
+  let mapleader = "\<space>"
+  map - <localleader>
+  let maplocalleader = "-"
 
 " commands
   " Alt-Space is System menu
@@ -136,24 +153,18 @@ execute pathogen#infect()
   " quick source my vimrc
   nnoremap <leader>ok :source $MYVIMRC<cr>
 
-  " map <space> to : in mode so it's easier to input commands
-  noremap <space> :
-  " map q<space> to q: so we can get to the command editor
-  noremap q<space> q:
-  noremap : :throw "use space!"<cr>
+  " map ; to : in mode so it's easier to input commands
+  noremap ; :
+  " map q; to q: so we can get to the command editor
+  noremap q; q:
 
-  " map ctrl+l to remove highlighting
+  " map escape to remove search highlighting in normal mode
   nnoremap <esc> :noh<cr>
-  nnoremap <c-l> :noh<cr>:silent! syntax sync fromstart<cr>
-  vnoremap <c-l> <c-c>:noh<cr>:silent! syntax sync fromstart<cr>gv
-  inoremap <c-l> <c-o>:noh<cr>:silent! syntax sync fromstart<cr>
 
   " map forward and backward window switching in normal, visual, command
   " pending, and insert modes
   noremap  <leader>, <c-w>w
-  inoremap <leader>, <c-c><c-w>w
   nnoremap <leader>< <c-w>W
-  inoremap <leader>< <c-c><c-w>W
 
 " cursor movement
   " move to end of line with L
