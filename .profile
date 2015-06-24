@@ -49,7 +49,6 @@
 # ---------------------------
 # here's Doug's config stuff!
 # ---------------------------
-alias f3cp="scp /c/Users/Counter/Documents/expect/f3 dougc13@150.150.0.15:/home/dougc13/autoexpect/f3"
 alias lt="ls -latr"
 alias sb="ssh dougc13@150.150.0.15"
 alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
@@ -60,6 +59,8 @@ alias ep="v ~/.profile"
 alias sp="source ~/.profile"
 alias ahk="AutoHotKey.exe"
 alias ahc="/c/Program\ Files/AutoHotkey/Compiler/Ahk2Exe.exe"
+alias gd='git difftool --noprompt --trust-exit-code
+          --extcmd="/c/Users/Counter/Vim/vim74/gvim.exe -d --nofork"'
 
 function ahk () { AutoHotKey.exe "$@"; }
 function v () { vim "$@" & disown; }
