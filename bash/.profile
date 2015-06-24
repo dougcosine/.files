@@ -1,4 +1,18 @@
-#Default .profile junk
+# BC MODIFICATIONS 2011-07-05 to make scp work again
+#
+# Test for an interactive shell.  There is no need to set anything
+# past this point for scp and rcp, and it's important to refrain from
+# outputting anything in those cases.
+
+if [[ $- != *i* ]] ; then
+  # Shell is non-interactive.  Be done now!
+  return
+fi
+
+export GIT_EDITOR=/c/Users/Counter/Vim/vim74/gvim.exe
+export PATH=$PATH:/c/Program\ Files/AutoHotKey
+
+# ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
   #       already has a different purpose in SSH.
 
@@ -46,23 +60,42 @@
     ssh-add
   fi
 
+  unset env
+
 # ---------------------------
 # here's Doug's config stuff!
 # ---------------------------
 alias lt="ls -latr"
-alias sb="ssh dougc13@150.150.0.15"
 alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
 alias gly="git log --pretty=oneline --since='38 hours ago' --abbrev-commit"
 # Specialized history with super grep powers
 alias ghist="history|grep $@"
 alias ep="v ~/.profile"
 alias sp="source ~/.profile"
-alias ahk="AutoHotKey.exe"
-alias ahc="/c/Program\ Files/AutoHotkey/Compiler/Ahk2Exe.exe"
-alias gd='git difftool --noprompt --extcmd="/c/Users/Counter/Vim/vim74/gvim.exe -d --nofork --servername git-difftool"'
+alias ld='ls -al -d * | egrep "^d"'
 
-function ahk () { AutoHotKey.exe "$@"; }
-function v () { vim "$@" & disown; }
+alias sb="ssh dougc13@150.150.0.15"
+alias ahk="AutoHotKey.exe"
+alias vd='/c/Users/Counter/Vim/vim74/gvim.exe -d --servername diff'
+alias gd='git difftool --noprompt --extcmd="/c/Users/Counter/Vim/vim74/gvim.exe -d --nofork --servername diff"'
+
+function getConfirmation() {
+  message=$1
+  read -p "$message" -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function v () {
+  /c/Users/Counter/Vim/vim74/gvim.exe --servername v --remote-tab-silent "$@" & disown;
+}
+
+# commit with an optional message, then push to remote
 function gcp () {
   if ! ssh-add -l; then
     # ssh doesn't have any keys, so add them
@@ -81,29 +114,9 @@ function gcp () {
   git push
 }
 
-function gmp () {
-  if ! ssh-add -l; then
-    # ssh doesn't have any keys, so add them
-    ssh-add -t 1h
-  fi
+function ahk () { AutoHotKey.exe "$@"; }
 
-  echo "git checkout $2"
-  git checkout $2
-  echo "git merge $1"
-  git merge $1
-  echo "git push"
-  git push
-  echo "git checkout $3"
-  git checkout $3
-  echo "git merge $2"
-  git merge $2
-  echo "git push"
-  git push
+function vd () {
+  /c/Users/Counter/Vim/vim74/gvim.exe -d --servername diff "$@" & disown;
 }
-
-export GIT_EDITOR=/c/Users/Counter/Vim/vim74/gvim.exe
-
-export PATH=$PATH:/c/Program\ Files/AutoHotKey
-
-unset env
 
