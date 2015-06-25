@@ -65,8 +65,8 @@
 # 3.    When vimdiff exits cleanly, the file containing the conflict markers
 #       will be updated with the contents of your LCONFL file edits.
 #
-# NOTE: Use :cq to abort the merge and exit Vim with an error code.
-if [[ -z $@ || $# != "5" ]] ; then
+# NOTE: Use :cq to abort the merge and exit Vim with an error code.
+if [[ -z $@ || $# != "5" ]] ; then
     echo -e "Usage: $0 \$EDITOR \$BASE \$LOCAL \$REMOTE \$MERGED"
     exit 1
 fi
@@ -94,7 +94,7 @@ $cmd -f -R -d "${LCONFL}" "${RCONFL}" \
     -c ":winc t" -c ":tabe $QMERGED" -c ":tabfir"
 EC=$?
 # Overwrite $MERGED only if vimdiff exits cleanly.
-if [[ $EC == "0" ]] ; then
+if [[ $EC == "0" ]] ; then
     cat "${LCONFL}" > "${MERGED}"
 fi
 exit $EC
