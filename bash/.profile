@@ -9,8 +9,13 @@ if [[ $- != *i* ]] ; then
   return
 fi
 
-export GIT_EDITOR=/c/Users/Counter/Vim/vim74/gvim.exe
-export PATH=$PATH:/c/Program\ Files/AutoHotKey
+if [[ $PAtH == *":/c/Program\ Files/AutoHotKey"* ]]; then
+  export PATH=$PATH:/c/Program\ Files/AutoHotKey
+fi
+if [[ $PAtH == *":~/Vim/vim74"* ]]; then
+  export PATH=$PATH:~/Vim/vim74
+fi
+export GIT_EDITOR=gvim.exe
 
 # ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
@@ -76,8 +81,8 @@ alias ld='ls -al -d * | egrep "^d"'
 
 alias sb="ssh dougc13@150.150.0.15"
 alias ahk="AutoHotKey.exe"
-alias vd='/c/Users/Counter/Vim/vim74/gvim.exe -d --servername diff'
-alias gd='git difftool --noprompt --extcmd="/c/Users/Counter/Vim/vim74/gvim.exe -d --nofork --servername diff"'
+alias vd='gvim.exe -d --servername diff'
+alias gd='git difftool --noprompt --extcmd="gvim.exe -d --nofork --servername diff"'
 
 function getConfirmation() {
   message=$1
@@ -92,7 +97,8 @@ function getConfirmation() {
 }
 
 function v () {
-  /c/Users/Counter/Vim/vim74/gvim.exe --servername v --remote-tab-silent "$@" & disown;
+  gvim.exe --servername v --remote-tab-silent "$@" &
+  disown
 }
 
 # commit with an optional message, then push to remote
@@ -117,6 +123,7 @@ function gcp () {
 function ahk () { AutoHotKey.exe "$@"; }
 
 function vd () {
-  /c/Users/Counter/Vim/vim74/gvim.exe -d --servername diff "$@" & disown;
+  gvim.exe -d --servername diff "$@" &
+  disown
 }
 
