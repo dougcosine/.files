@@ -172,6 +172,9 @@ execute pathogen#infect()
   noremap  <leader>, <c-w>w
   nnoremap <leader>< <c-w>W
 
+  " map tabclose to match cVim
+  noremap <leader>x :tabclose<cr>
+
 " cursor movement
   " move to end of line with L
   noremap  L $
