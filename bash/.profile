@@ -10,6 +10,7 @@ if [[ $- != *i* ]] ; then
 fi
 
 for path in ":/c/Program\ Files/AutoHotKey"\
+            ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
             ":~/Vim/vim74"; do
   if [[ $PATH != *$path* ]]; then
     export PATH=$PATH:$path
@@ -17,10 +18,6 @@ for path in ":/c/Program\ Files/AutoHotKey"\
 done
 
 export GIT_EDITOR=gvim.exe
-export PATH=$PATH:/c/Program\ Files/AutoHotKey
-export PATH=$PATH:/c/Program\ Files/Java/jdk1.8.0_45/bin
-export PATH=$PATH:/c/Program\ Files/ImageMagick-6.9.1-Q16
-export PATH=$PATH:/c/Users/Counter/AppData/Local/Zint
 
 # ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
