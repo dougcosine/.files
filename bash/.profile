@@ -17,6 +17,10 @@ for path in ":/c/Program\ Files/AutoHotKey"\
 done
 
 export GIT_EDITOR=gvim.exe
+export PATH=$PATH:/c/Program\ Files/AutoHotKey
+export PATH=$PATH:/c/Program\ Files/Java/jdk1.8.0_45/bin
+export PATH=$PATH:/c/Program\ Files/ImageMagick-6.9.1-Q16
+export PATH=$PATH:/c/Users/Counter/AppData/Local/Zint
 
 # ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
@@ -71,19 +75,19 @@ export GIT_EDITOR=gvim.exe
 # ---------------------------
 # here's Doug's config stuff!
 # ---------------------------
-alias lt="ls -latr"
-alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
-alias gly="git log --pretty=oneline --since='38 hours ago' --abbrev-commit"
-# Specialized history with super grep powers
-alias ghist="history|grep $@"
-alias ep="v ~/.profile"
-alias sp="source ~/.profile"
-alias ld='ls -al -d * | egrep "^d"'
+  alias lt="ls -latr"
+  alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
+  alias gly="git log --pretty=oneline --since='38 hours ago' --abbrev-commit"
+  # Specialized history with super grep powers
+  alias ghist="history|grep $@"
+  alias ep="v ~/.profile"
+  alias sp="source ~/.profile"
+  alias ld='ls -al -d * | egrep "^d"'
 
-alias sb="ssh dougc13@150.150.0.15"
-alias ahk="AutoHotKey.exe"
-alias vd='gvim.exe -d --servername diff'
-alias gd='git difftool --noprompt --extcmd="gvim.exe -d --nofork --servername diff"'
+  alias sb="ssh dougc13@150.150.0.15"
+  alias ahk="AutoHotKey.exe"
+  alias vd='gvim.exe -d --servername diff'
+  alias gd='git difftool --noprompt --extcmd="gvim.exe -d --nofork --servername diff"'
 
 function getConfirmation() {
   message=$1

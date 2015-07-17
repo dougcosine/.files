@@ -113,7 +113,7 @@ execute pathogen#infect()
   nmap mc c``
   nmap mC c''
   nmap md ``d``
-  nmap mD ''d``
+  nmap mD ''d''
   nmap m= ``=``
   nmap m> ``>``
   nmap m< ``<``
@@ -171,6 +171,9 @@ execute pathogen#infect()
   " pending, and insert modes
   noremap  <leader>, <c-w>w
   nnoremap <leader>< <c-w>W
+
+  " map tabclose to match cVim
+  noremap <leader>x :tabclose<cr>
 
 " cursor movement
   " move to end of line with L
