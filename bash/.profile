@@ -9,12 +9,13 @@ if [[ $- != *i* ]] ; then
   return
 fi
 
-if [[ $PAtH == *":/c/Program\ Files/AutoHotKey"* ]]; then
-  export PATH=$PATH:/c/Program\ Files/AutoHotKey
-fi
-if [[ $PAtH == *":~/Vim/vim74"* ]]; then
-  export PATH=$PATH:~/Vim/vim74
-fi
+for path in ":/c/Program\ Files/AutoHotKey"\
+            ":~/Vim/vim74"; do
+  if [[ $PATH != *$path* ]]; then
+    export PATH=$PATH:$path
+  fi
+done
+
 export GIT_EDITOR=gvim.exe
 
 # ssh key initialization
