@@ -9,15 +9,27 @@ if [[ $- != *i* ]] ; then
   return
 fi
 
-for path in ":/c/Program\ Files/AutoHotKey"\
-            ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
-            ":~/Vim/vim74"; do
-  if [[ $PATH != *$path* ]]; then
-    export PATH=$PATH:$path
-  fi
-done
+platform='unknown'
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+  platform='linux'
+elif [[ "$unamestr" == 'MINGW32'* ]]; then
+  platform='mingw32'
+fi
 
-export GIT_EDITOR=gvim.exe
+if [[ $platform == 'mingw32' ]]; then
+  for path in ":/c/Program\ Files/AutoHotKey"\
+              ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
+              ":~/Vim/vim74"; do
+    if [[ "$PATH" != *"$path"* ]]; then
+      export PATH=$PATH:$path
+    fi
+  done
+
+  export GIT_EDITOR=gvim.exe
+else
+  export GIT_EDITOR=gvim
+fi
 
 # ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
