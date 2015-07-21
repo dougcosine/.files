@@ -26,10 +26,12 @@ if [[ $platform == 'mingw32' ]]; then
     fi
   done
 
-  export GIT_EDITOR=gvim.exe
+  export VIM=gvim.exe
 else
-  export GIT_EDITOR=gvim
+  export VIM=vim
 fi
+
+export GIT_EDITOR=$VIM
 
 # ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
@@ -70,13 +72,15 @@ fi
     agent_load_env
   fi
 
-  # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub, you'll need
-  # to paste the proper path after ssh-add
-  if ! agent_is_running; then
-    agent_start
-    ssh-add -t 1h
-  elif ! agent_has_keys; then
-    ssh-add
+  if [[ $platform == 'mingw32' ]]; then
+    # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub, you'll need
+    # to paste the proper path after ssh-add
+    if ! agent_is_running; then
+      agent_start
+      ssh-add -t 1h
+    elif ! agent_has_keys; then
+      ssh-add -t 1h
+    fi
   fi
 
   unset env
@@ -95,8 +99,10 @@ fi
 
   alias sb="ssh dougc13@150.150.0.15"
   alias ahk="AutoHotKey.exe"
-  alias vd='gvim.exe -d --servername diff'
-  alias gd='git difftool --noprompt --extcmd="gvim.exe -d --nofork --servername diff"'
+  alias vd='$VIM -d --servername diff'
+  alias gd='git difftool --noprompt --extcmd="$VIM -d --nofork --servername diff"'
+  # add ssh keys
+  alias sa="ssh-add -t 1h"
 
 function getConfirmation() {
   message=$1
@@ -111,7 +117,7 @@ function getConfirmation() {
 }
 
 function v () {
-  gvim.exe --servername v --remote-tab-silent "$@" &
+  $VIM --servername v --remote-tab-silent "$@" &
   disown
 }
 
@@ -134,10 +140,26 @@ function gcp () {
   git push
 }
 
-function ahk () { AutoHotKey.exe "$@"; }
+# git merge alias
+function gm () {
+  git merge $1
+}
+
+function gmc() {
+  branch=$1
+  command=$2
+  if [ `pwd` -ef ~/expect ] ||\
+    getConfirmation "Not in ~/expect. continue? "; then
+  gm $branch
+  $command
+fi
+
+function ahk () {
+  AutoHotKey.exe "$@"
+}
 
 function vd () {
-  gvim.exe -d --servername diff "$@" &
+  $VIM -d --servername diff "$@" &
   disown
 }
 
