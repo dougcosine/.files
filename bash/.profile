@@ -26,12 +26,12 @@ if [[ $platform == 'mingw32' ]]; then
     fi
   done
 
-  export VIM=gvim.exe
+  export vimExecutable=gvim.exe
 else
-  export VIM=vim
+  export vimExecutable=vim
 fi
 
-export GIT_EDITOR=$VIM
+export GIT_EDITOR=$vimExecutable
 
 # ssh key initialization
   # Note: ~/.ssh/environment should not be used, as it
@@ -99,8 +99,8 @@ export GIT_EDITOR=$VIM
 
   alias sb="ssh dougc13@150.150.0.15"
   alias ahk="AutoHotKey.exe"
-  alias vd='$VIM -d --servername diff'
-  alias gd='git difftool --noprompt --extcmd="$VIM -d --nofork --servername diff"'
+  alias vd='$vimExecutable -d --servername diff'
+  alias gd='git difftool --noprompt --extcmd="$vimExecutable -d --nofork --servername diff"'
   # add ssh keys
   alias sa="ssh-add -t 1h"
 
@@ -117,7 +117,7 @@ function getConfirmation() {
 }
 
 function v () {
-  $VIM --servername v --remote-tab-silent "$@" &
+  $vimExecutable --servername v --remote-tab-silent "$@" &
   disown
 }
 
@@ -160,7 +160,7 @@ function ahk () {
 }
 
 function vd () {
-  $VIM -d --servername diff "$@" &
+  $vimExecutable -d --servername diff "$@" &
   disown
 }
 
