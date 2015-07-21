@@ -150,9 +150,10 @@ function gmc() {
   command=$2
   if [ `pwd` -ef ~/expect ] ||\
     getConfirmation "Not in ~/expect. continue? "; then
-  gm $branch
-  $command
-fi
+    gm $branch
+    $command
+  fi
+}
 
 function ahk () {
   AutoHotKey.exe "$@"
