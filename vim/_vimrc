@@ -43,6 +43,8 @@
   set backspace=indent,eol,start
   " backspace, space, h, and l keys wrap to previous/next line
   set whichwrap+=bs
+  " disable bell
+  set vb t_vb=
   let cobol_legacy_code = 1
   " enable the saving and restoring of screen positions.
   let g:screen_size_restore_pos = 1
