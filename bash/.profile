@@ -26,7 +26,7 @@ if [[ $platform == 'mingw32' ]]; then
     fi
   done
 
-  export vimExecutable=gvim.exe
+  export vimExecutable=~/Vim/vim74/gvim.exe
 else
   export vimExecutable=vim
 fi
