@@ -20,7 +20,6 @@ fi
 if [[ $platform == 'mingw32' ]]; then
   for path in ":/c/Program\ Files/AutoHotKey"\
               ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
-              ":/c/Program\ Files\ (x86)/Google/Chrome/Application"\
               ":~/Vim/vim74"; do
     if [[ "$PATH" != *"$path"* ]]; then
       export PATH=$PATH:$path
@@ -104,6 +103,8 @@ export GIT_EDITOR=$vimExecutable
   alias gd='git difftool --noprompt --extcmd="$vimExecutable -d --nofork --servername diff"'
   # add ssh keys
   alias sa="ssh-add -t 1h"
+  # open file using Google Chrome
+  alias ch="/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
 
 function getConfirmation() {
   message=$1
