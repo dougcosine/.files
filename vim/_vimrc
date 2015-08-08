@@ -35,6 +35,7 @@
   set showcmd               "display incomplete commands
   set incsearch             "do incremental searching
   set fileformat=unix       "use unix style line endings
+  set fileformats=unix,dos  "no, really! use unix style line endings
   syntax on                 "switch syntax highlighting on
   set hlsearch              "highlight the last used search pattern
   "use file's location as working directory for shell commands
