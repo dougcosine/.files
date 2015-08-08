@@ -1,0 +1,10 @@
+$include /etc/inputrc
+set bell-style none
+set completion-ignore-case on
+set editing-mode vi
+set history-size 0
+set skip-completed-text on
+
+"H": beginning-of-line
+"L": end-of-line
+
