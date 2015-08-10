@@ -102,6 +102,7 @@ execute pathogen#infect()
 " EasyMotion
   let g:EasyMotion_smartcase = 1
   let g:EasyMotion_leader_key = 'm'
+  let g:EasyMotion_keys='asonidetuh'
   nmap m  <Plug>(easymotion-prefix)
   nmap mw <Plug>(easymotion-bd-w)
   nmap mW <Plug>(easymotion-bd-W)
@@ -144,7 +145,7 @@ execute pathogen#infect()
   endif
 
 " leaders
-  map <space> <leader>
+  map <space> <nop>
   let mapleader = "\<space>"
   map - <localleader>
   let maplocalleader = "-"
