@@ -21,6 +21,7 @@ if [[ $platform == 'mingw32' ]]; then
   for path in ":/c/Program\ Files/AutoHotKey"\
               ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
               ":/c/MinGW/bin"\
+              ":/c/MinGW/msys/1.0/bin"\
               ":~/Vim/vim74"; do
     if [[ "$PATH" != *"$path"* ]]; then
       export PATH=$PATH:$path
