@@ -108,6 +108,10 @@ export GIT_EDITOR=$vimExecutable
   # open file using Google Chrome
   alias ch="/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
 
+function rsync() {
+  cmd "/C rsync $@"
+}
+
 function getConfirmation() {
   message=$1
   read -p "$message" -n 1 -r
