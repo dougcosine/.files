@@ -29,5 +29,5 @@ SetScrollLockState, AlwaysOff
 ^'::^q
 
 #IfWinActive
-Capslock::Esc
+*Capslock::Esc
 
