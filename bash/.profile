@@ -107,6 +107,8 @@ export GIT_EDITOR=$vimExecutable
   alias sa="ssh-add -t 1h"
   # open file using Google Chrome
   alias ch="/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
+  # cd to .files
+  alias c.="cd ~/.files"
 
 function rsync() {
   cmd "/C rsync $@"

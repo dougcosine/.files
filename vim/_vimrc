@@ -119,6 +119,8 @@ execute pathogen#infect()
   nmap md ``d``
   nmap mD ''d''
   nmap m= ``=``
+  " look into changing where the cursor ends up with indentation
+  " so these actions will be repeatable.
   nmap m> ``>``
   nmap m< ``<``
   nmap mgu ``gu``
