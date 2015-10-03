@@ -129,6 +129,10 @@ execute pathogen#infect()
   map n  <Plug>(easymotion-next)
   map N  <Plug>(easymotion-prev)
 
+" mark
+  " make M initiate setting marks, since I remapped m to EasyMotion's leader
+  nnoremap M m
+
 " diff specific
   if &diff
     " if we're in diff mode map ctrl+l to turn off search highlighting,
@@ -188,14 +192,9 @@ execute pathogen#infect()
   " if you were already there, move to first character of line
   noremap  H :call LineHome('n')<cr>:echo<cr>
   vnoremap H :<c-u>call LineHome('v')<cr>
-  " make n always search forward and N always search backward
-  " nnoremap <silent> <expr> n (v:searchforward ?
-  "  \ ':silent! exe "normal nzO<cr>"<cr>' : ':silent! exe "normal NzO<cr>"<cr>')
-  "nnoremap <silent> <expr> N (v:searchforward ?
-  "  \ ':silent! exe "normal NzO<cr>"<cr>' : ':silent! exe "normal nzO<cr>"<cr>')
 
 " modal operators
-  " leave insert and visual modes with hl or HL
+  " map escape to leave insert and visual modes and also remove highlighting
   inoremap <esc> <esc>l:noh<cr>
   vnoremap <esc> <esc>:noh<cr>
 
