@@ -102,7 +102,14 @@ export GIT_EDITOR=$vimExecutable
   alias vd='$vimExecutable -d --servername diff'
   alias gd='git difftool --noprompt --extcmd="$vimExecutable -d --nofork --servername diff"'
   # add ssh keys
-  alias sa="ssh-add -t 1h"
+  alias sa="addSSHKeys"
+
+function addSSHKeys() {
+  if ! ps aux|grep [s]sh-agent; then
+    eval `ssh-agent`
+  fi
+  ssh-add -t 1h
+}
 
 function getConfirmation() {
   message=$1
