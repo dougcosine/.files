@@ -20,13 +20,16 @@ fi
 if [[ $platform == 'mingw32' ]]; then
   for path in ":/c/Program\ Files/AutoHotKey"\
               ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
+              ":/c/MinGW/bin"\
+              ":/c/MinGW/msys/1.0/bin"\
+              ":~/XAMPP/php/"\
               ":~/Vim/vim74"; do
     if [[ "$PATH" != *"$path"* ]]; then
       export PATH=$PATH:$path
     fi
   done
 
-  export vimExecutable=gvim.exe
+  export vimExecutable=~/Vim/vim74/gvim.exe
 else
   export vimExecutable=vim
 fi
@@ -92,7 +95,7 @@ export GIT_EDITOR=$vimExecutable
   alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
   alias gly="git log --pretty=oneline --since='38 hours ago' --abbrev-commit"
   # Specialized history with super grep powers
-  alias ghist="history|grep $@"
+  alias gh="history|grep $@"
   alias ep="v ~/.profile"
   alias sp="source ~/.profile"
   alias ld='ls -al -d * | egrep "^d"'
@@ -109,6 +112,10 @@ function addSSHKeys() {
     eval `ssh-agent`
   fi
   ssh-add -t 1h
+}
+
+function rsync() {
+  cmd "/C rsync $@"
 }
 
 function getConfirmation() {

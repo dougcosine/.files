@@ -1,4 +1,6 @@
 SetTitleMatchMode 1
+SetCapsLockState, AlwaysOff
+SetScrollLockState, AlwaysOff
 #IfWinNotActive Anzio Lite -  150.150.0.10
 ^;::^z
 ^q::^x
@@ -27,5 +29,5 @@ SetTitleMatchMode 1
 ^'::^q
 
 #IfWinActive
-Capslock::Esc
+*Capslock::Esc
 
