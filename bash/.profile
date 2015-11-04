@@ -78,8 +78,10 @@ export GIT_EDITOR=$vimExecutable
   if ! agent_is_running; then
     agent_start
     ssh-add -t 1h
-  elif ! agent_has_keys; then
-    ssh-add -t 1h
+  elif ! agent_has_keys && ; then
+    if [ "$dontAddSSHKeys" ]; then
+      ssh-add -t 1h
+    fi
   fi
 
   unset env
