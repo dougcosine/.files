@@ -49,9 +49,11 @@ export GIT_EDITOR=$vimExecutable
   agent_is_running() {
     if [ "$SSH_AUTH_SOCK" ]; then
       # ssh-add returns:
-      #   0 = agent running, has keys
-      #   1 = agent running, no keys
-      #   2 = agent not running
+      #   0 = agent running, has keys, first operand of 'or' succeeds,
+      #       function returns true
+      #   1 = agent running, no keys, second operand of 'or' succeeds,
+      #       function returns true
+      #   2 = agent not running, 'or' fails, functions returns false
       ssh-add -l >/dev/null 2>&1 || [ $? -eq 1 ]
     else
       false
@@ -67,23 +69,17 @@ export GIT_EDITOR=$vimExecutable
   }
 
   agent_start() {
-    (umask 077; ssh-agent >"$env")
+    (umask 077; ssh-agent > "$env")
     . "$env" >/dev/null
   }
 
+  # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub,
+  # you'll need to paste the proper path after ssh-add
   if ! agent_is_running; then
-    agent_load_env
-  fi
-
-  if [[ $platform == 'mingw32' ]]; then
-    # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub, you'll need
-    # to paste the proper path after ssh-add
-    if ! agent_is_running; then
-      agent_start
-      ssh-add -t 1h
-    elif ! agent_has_keys; then
-      ssh-add -t 1h
-    fi
+    agent_start
+    ssh-add -t 1h
+  elif ! agent_has_keys; then
+    ssh-add -t 1h
   fi
 
   unset env
