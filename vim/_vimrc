@@ -57,6 +57,8 @@
 " strip white space from line endings on save
 autocmd BufWritePre * call StaticViewCall('%s/\s\+$//e')
 noh "turn of highlighting after the substitute command is run
+" start in insert mode for git commit messages
+autocmd FileType gitcommit 1 | startinsert | :redraw
 
 " if you want to run some command that moves the screen or unfolds folds
 " but you want the screen and cursor in their original positions when
