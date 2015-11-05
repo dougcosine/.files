@@ -4,6 +4,8 @@
 # past this point for scp and rcp, and it's important to refrain from
 # outputting anything in those cases.
 
+dontAddSSHKeys=$1
+
 if [[ $- != *i* ]] ; then
   # Shell is non-interactive.  Be done now!
   return
@@ -75,11 +77,13 @@ export GIT_EDITOR=$vimExecutable
 
   # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub,
   # you'll need to paste the proper path after ssh-add
+  agent_load_env
   if ! agent_is_running; then
     agent_start
-    ssh-add -t 1h
-  elif ! agent_has_keys; then
-    if [ -z "$dontAddSSHKeys" ]; then
+  fi
+  if ! agent_has_keys; then
+    if [ "$dontAddSSHKeys" != "dontAddSSHKeys" ]; then
+      echo $addSSHKeys
       ssh-add -t 1h
     fi
   fi
@@ -106,9 +110,6 @@ export GIT_EDITOR=$vimExecutable
   alias sa="addSSHKeys"
 
 function addSSHKeys() {
-  if ! ps aux|grep [s]sh-agent; then
-    eval `ssh-agent`
-  fi
   ssh-add -t 1h
 }
 
@@ -135,7 +136,7 @@ function v () {
 
 # commit with an optional message, then push to remote
 function gcp () {
-  if ! ssh-add -l; then
+  if ! agent_has_keys; then
     # ssh doesn't have any keys, so add them
     ssh-add -t 1h
   fi
