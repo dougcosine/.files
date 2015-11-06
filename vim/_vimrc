@@ -46,7 +46,6 @@
   set whichwrap+=bs
   " disable bell
   set vb t_vb=
-  let cobol_legacy_code = 1
   " enable the saving and restoring of screen positions.
   let g:screen_size_restore_pos = 1
   " To save and restore screen for each Vim instance.
@@ -186,6 +185,11 @@ execute pathogen#infect()
 
   " map tabclose to match cVim
   noremap <leader>x :tabclose<cr>
+
+  " map F10 to echo the syntax groups the character under the cursor matches
+  map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
+      \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+      \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " cursor movement
   " move to end of line with L
