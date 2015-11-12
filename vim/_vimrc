@@ -186,8 +186,8 @@ execute pathogen#infect()
   " map tabclose to match cVim
   noremap <leader>x :tabclose<cr>
 
-  " map F10 to echo the syntax groups the character under the cursor matches
-  map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
+  " map f10 to echo the syntax groups the character under the cursor matches
+  map <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
       \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
