@@ -97,7 +97,7 @@ export GIT_EDITOR=$vimExecutable
   alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
   alias gly="git log --pretty=oneline --since='38 hours ago' --abbrev-commit"
   # Specialized history with super grep powers
-  alias gh="history|grep $@"
+  alias gh="history|grep"
   alias ep="v ~/.profile"
   alias sp="source ~/.profile"
   alias ld='ls -al -d * | egrep "^d"'
