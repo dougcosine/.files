@@ -187,7 +187,8 @@ execute pathogen#infect()
     " properly either.
     " maybe add some logic so it only sets term the first
     " time <esc> is pressed? maybe don't worry about it?
-    nnoremap <esc> :set term=ansi<cr>:noh<cr> endif
+    nnoremap <esc> :set term=ansi<cr>:noh<cr>
+  endif
 
   " map forward and backward window switching in normal, visual, command
   " pending, and insert modes
