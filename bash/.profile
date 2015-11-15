@@ -4,6 +4,8 @@
 # past this point for scp and rcp, and it's important to refrain from
 # outputting anything in those cases.
 
+dontAddSSHKeys=$1
+
 if [[ $- != *i* ]] ; then
   # Shell is non-interactive.  Be done now!
   return
@@ -50,9 +52,11 @@ export GIT_EDITOR=$vimExecutable
   agent_is_running() {
     if [ "$SSH_AUTH_SOCK" ]; then
       # ssh-add returns:
-      #   0 = agent running, has keys
-      #   1 = agent running, no keys
-      #   2 = agent not running
+      #   0 = agent running, has keys, first operand of 'or' succeeds,
+      #       function returns true
+      #   1 = agent running, no keys, second operand of 'or' succeeds,
+      #       function returns true
+      #   2 = agent not running, 'or' fails, functions returns false
       ssh-add -l >/dev/null 2>&1 || [ $? -eq 1 ]
     else
       false
@@ -68,21 +72,19 @@ export GIT_EDITOR=$vimExecutable
   }
 
   agent_start() {
-    (umask 077; ssh-agent >"$env")
+    (umask 077; ssh-agent > "$env")
     . "$env" >/dev/null
   }
 
+  # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub,
+  # you'll need to paste the proper path after ssh-add
+  agent_load_env
   if ! agent_is_running; then
-    agent_load_env
+    agent_start
   fi
-
-  if [[ $platform == 'mingw32' ]]; then
-    # if your keys are not stored in ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub, you'll need
-    # to paste the proper path after ssh-add
-    if ! agent_is_running; then
-      agent_start
-      ssh-add -t 1h
-    elif ! agent_has_keys; then
+  if ! agent_has_keys; then
+    if [ "$dontAddSSHKeys" != "dontAddSSHKeys" ]; then
+      echo $addSSHKeys
       ssh-add -t 1h
     fi
   fi
@@ -96,7 +98,7 @@ export GIT_EDITOR=$vimExecutable
   alias lola="git log --graph --decorate --pretty=oneline --abbrev-commit"
   alias gly="git log --pretty=oneline --since='38 hours ago' --abbrev-commit"
   # Specialized history with super grep powers
-  alias ghist="history|grep $@"
+  alias gh="history|grep"
   alias ep="v ~/.profile"
   alias sp="source ~/.profile"
   alias ld='ls -al -d * | egrep "^d"'
@@ -106,11 +108,11 @@ export GIT_EDITOR=$vimExecutable
   alias vd='$vimExecutable -d --servername diff'
   alias gd='git difftool --noprompt --extcmd="$vimExecutable -d --nofork --servername diff"'
   # add ssh keys
-  alias sa="ssh-add -t 1h"
-  # open file using Google Chrome
-  alias ch="/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
-  # cd to .files
-  alias c.="cd ~/.files"
+  alias sa="addSSHKeys"
+
+function addSSHKeys() {
+  ssh-add -t 1h
+}
 
 function rsync() {
   cmd "/C rsync $@"
@@ -135,7 +137,7 @@ function v () {
 
 # commit with an optional message, then push to remote
 function gcp () {
-  if ! ssh-add -l; then
+  if ! agent_has_keys; then
     # ssh doesn't have any keys, so add them
     ssh-add -t 1h
   fi

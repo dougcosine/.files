@@ -46,7 +46,6 @@
   set whichwrap+=bs
   " disable bell
   set vb t_vb=
-  let cobol_legacy_code = 1
   " enable the saving and restoring of screen positions.
   let g:screen_size_restore_pos = 1
   " To save and restore screen for each Vim instance.
@@ -57,6 +56,8 @@
 " strip white space from line endings on save
 autocmd BufWritePre * call StaticViewCall('%s/\s\+$//e')
 noh "turn of highlighting after the substitute command is run
+" start in insert mode for git commit messages
+autocmd FileType gitcommit 1 | startinsert | :redraw
 
 " if you want to run some command that moves the screen or unfolds folds
 " but you want the screen and cursor in their original positions when
@@ -129,6 +130,10 @@ execute pathogen#infect()
   map n  <Plug>(easymotion-next)
   map N  <Plug>(easymotion-prev)
 
+" mark
+  " make M initiate setting marks, since I remapped m to EasyMotion's leader
+  nnoremap M m
+
 " diff specific
   if &diff
     " if we're in diff mode map ctrl+l to turn off search highlighting,
@@ -171,7 +176,19 @@ execute pathogen#infect()
   noremap q; q:
 
   " map escape to remove search highlighting in normal mode
-  nnoremap <esc> :noh<cr>
+  if has("gui_running")
+    nnoremap <esc> :noh<cr>
+  else
+    " if we're on the backup server highlighting won't work until we change
+    " the term variable to ansi, but this change has to be made some time
+    " after the vimrc is sourced. setting the TERM env var causes problems
+    " with escape sequences, so we can't do that. setting term here in the
+    " vimrc doesn't cause those problems, but it does't make colors work
+    " properly either.
+    " maybe add some logic so it only sets term the first
+    " time <esc> is pressed? maybe don't worry about it?
+    nnoremap <esc> :set term=ansi<cr>:noh<cr>
+  endif
 
   " map forward and backward window switching in normal, visual, command
   " pending, and insert modes
@@ -181,6 +198,11 @@ execute pathogen#infect()
   " map tabclose to match cVim
   noremap <leader>x :tabclose<cr>
 
+  " map f10 to echo the syntax groups the character under the cursor matches
+  map <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
+      \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+      \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
 " cursor movement
   " move to end of line with L
   noremap  L $
@@ -188,14 +210,9 @@ execute pathogen#infect()
   " if you were already there, move to first character of line
   noremap  H :call LineHome('n')<cr>:echo<cr>
   vnoremap H :<c-u>call LineHome('v')<cr>
-  " make n always search forward and N always search backward
-  " nnoremap <silent> <expr> n (v:searchforward ?
-  "  \ ':silent! exe "normal nzO<cr>"<cr>' : ':silent! exe "normal NzO<cr>"<cr>')
-  "nnoremap <silent> <expr> N (v:searchforward ?
-  "  \ ':silent! exe "normal NzO<cr>"<cr>' : ':silent! exe "normal nzO<cr>"<cr>')
 
 " modal operators
-  " leave insert and visual modes with hl or HL
+  " map escape to leave insert and visual modes and also remove highlighting
   inoremap <esc> <esc>l:noh<cr>
   vnoremap <esc> <esc>:noh<cr>
 
