@@ -53,12 +53,6 @@
   " For all Vim to use the same settings, change this to 0.
   let g:screen_size_by_vim_instance = 1
 
-" strip white space from line endings on save
-autocmd BufWritePre * call StaticViewCall('%s/\s\+$//e')
-noh "turn of highlighting after the substitute command is run
-" start in insert mode for git commit messages
-autocmd FileType gitcommit 1 | startinsert | :redraw
-
 " if you want to run some command that moves the screen or unfolds folds
 " but you want the screen and cursor in their original positions when
 " you're done, then you can use this?
@@ -97,6 +91,19 @@ function! LineHome(mode)
   return ""
 endfunction
 
+" switches to diff mode and compares the current buffer to the version last
+" saved in the filesystem.
+" Usage: ':DiffSaved' to start
+"        ':diffoff' or ':diffo' and close the 'Scratch' window to end
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
+
 " pathogen
 execute pathogen#infect()
 
@@ -129,6 +136,14 @@ execute pathogen#infect()
   nmap /  <Plug>(easymotion-sn)
   map n  <Plug>(easymotion-next)
   map N  <Plug>(easymotion-prev)
+
+" autocmds
+  " strip white space from line endings on save
+  au BufWritePre * call StaticViewCall('%s/\s\+$//e') | noh
+  " start in insert mode for git commit messages
+  au FileType gitcommit 1 | startinsert | :redraw
+  " set some cobol extensions
+  au BufRead,BufNewFile *.dc,*.fd,*.nm,*.sl,*.wk set ft=cobol
 
 " mark
   " make M initiate setting marks, since I remapped m to EasyMotion's leader
