@@ -111,31 +111,31 @@ execute pathogen#infect()
   let g:EasyMotion_smartcase = 1
   let g:EasyMotion_leader_key = 'm'
   let g:EasyMotion_keys='asonidetuh'
-  nmap m  <Plug>(easymotion-prefix)
-  nmap mw <Plug>(easymotion-bd-w)
-  nmap mW <Plug>(easymotion-bd-W)
-  nmap me <Plug>(easymotion-bd-e)
-  nmap mE <Plug>(easymotion-bd-E)
-  nmap mj <Plug>(easymotion-j)
-  nmap mk <Plug>(easymotion-k)
-  nmap ml <Plug>(easymotion-lineforward)
-  nmap mh <Plug>(easymotion-linebackward)
-  nmap my y``
-  nmap mY y''
-  nmap mc c``
-  nmap mC c''
-  nmap md ``d``
-  nmap mD ''d''
-  nmap m= ``=``
+  nmap     m  <Plug>(easymotion-prefix)
+  nmap     mw <Plug>(easymotion-bd-w)
+  nmap     mW <Plug>(easymotion-bd-W)
+  nmap     me <Plug>(easymotion-bd-e)
+  nmap     mE <Plug>(easymotion-bd-E)
+  nmap     mj <Plug>(easymotion-j)
+  nmap     mk <Plug>(easymotion-k)
+  nmap     ml <Plug>(easymotion-lineforward)
+  nmap     mh <Plug>(easymotion-linebackward)
+  nnoremap my y``
+  nnoremap mY y''
+  nnoremap mc c``
+  nnoremap mC c''
+  nnoremap md ``d``
+  nnoremap mD ''d''
+  nnoremap m= ``=``
   " look into changing where the cursor ends up with indentation
   " so these actions will be repeatable.
-  nmap m> ``>``
-  nmap m< ``<``
-  nmap mgu ``gu``
-  nmap mgU ``gU``
-  nmap /  <Plug>(easymotion-sn)
-  map n  <Plug>(easymotion-next)
-  map N  <Plug>(easymotion-prev)
+  nnoremap m>  ``>``
+  nnoremap m<  ``<``
+  nnoremap mgu ``gu``
+  nnoremap mgU ``gU``
+  nmap     g/  <Plug>(easymotion-sn)
+  nmap     gn  <Plug>(easymotion-next)
+  nmap     gN  <Plug>(easymotion-prev)
 
 " autocmds
   " strip white space from line endings on save
