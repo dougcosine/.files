@@ -15,11 +15,11 @@ platform='unknown'
 unamestr=`uname`
 if [[ "$unamestr" == 'Linux' ]]; then
   platform='linux'
-elif [[ "$unamestr" == 'MINGW32'* ]]; then
-  platform='mingw32'
+elif [[ "$unamestr" == 'MINGW'* ]]; then
+  platform='mingw'
 fi
 
-if [[ $platform == 'mingw32' ]]; then
+if [[ $platform == 'mingw' ]]; then
   for path in\
     ":/c/Program\ Files/AutoHotKey"\
     ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
