@@ -133,9 +133,13 @@ execute pathogen#infect()
   nnoremap m<  ``<``
   nnoremap mgu ``gu``
   nnoremap mgU ``gU``
-  nmap     m/  <Plug>(easymotion-sn)
-  nmap     mn  <Plug>(easymotion-next)
-  nmap     mN  <Plug>(easymotion-prev)
+  nmap     /   <Plug>(easymotion-sn)
+  nmap     n   <Plug>(easymotion-next)
+  nmap     N   <Plug>(easymotion-prev)
+  " remap vanilla search commands
+  noremap  m/ /
+  noremap  mn n
+  noremap  mN N
 
 " autocmds
   " strip white space from line endings on save
