@@ -148,6 +148,9 @@ execute pathogen#infect()
   au FileType gitcommit 1 | startinsert | :redraw
   " set some cobol extensions
   au BufRead,BufNewFile *.dc,*.fd,*.nm,*.sl,*.wk set ft=cobol
+  " If doing a diff. Upon writing changes to file, automatically update the
+  " differences http://vim.wikia.com/wiki/Update_the_diff_view_automatically
+  au BufWritePost * if &diff == 1 | diffupdate | endif
 
 " mark
   " make M initiate setting marks, since I remapped m to EasyMotion's leader
@@ -162,6 +165,9 @@ execute pathogen#infect()
     inoremap <c-l> <c-o>:noh<cr><c-o>:sil! syn-sync-first<cr><c-o>:diffu<cr>
     " maximize the window
     au GUIEnter * simalt ~x
+    " remap fold navigation to diff navigation
+    noremap  zj    ]c
+    noremap  zk    [c
   else
     " if we're not in diff mode, just map ctrl+l to turn off search
     " highlighting and refresh syntax highlighting
