@@ -21,8 +21,9 @@ fi
 
 if [[ $platform == 'mingw' ]]; then
   for path in\
-    ":/c/Program\ Files/AutoHotKey"\
-    ":/c/Program\ Files/Java/jdk1.8.0_45/bin"\
+    ":/c/Program Files/AutoHotKey"\
+    ":/c/Program Files (x86)/Google/Chrome/Application"\
+    ":/c/Program Files/Java/jdk1.8.0_45/bin"\
     ":/c/MinGW/bin"\
     ":/c/MinGW/msys/1.0/bin"\
     ":~/Vim/vim74"\
