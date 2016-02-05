@@ -154,7 +154,9 @@ execute pathogen#infect()
   endif
   " If doing a diff. Upon writing changes to file, automatically update the
   " differences http://vim.wikia.com/wiki/Update_the_diff_view_automatically
-  au BufWritePost * if &diff == 1 | diffupdate | endif
+  if &diff
+    au BufWritePost * diffupdate
+  endif
 
 " mark
   " make M initiate setting marks, since I remapped m to EasyMotion's leader
