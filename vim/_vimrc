@@ -144,6 +144,10 @@ execute pathogen#infect()
   au FileType gitcommit 1 | startinsert | :redraw
   " set some cobol extensions
   au BufRead,BufNewFile *.dc,*.fd,*.nm,*.sl,*.wk set ft=cobol
+  "
+  if !has("gui_running")
+    au VimEnter * :set term=ansi | :colo slate
+  endif
 
 " mark
   " make M initiate setting marks, since I remapped m to EasyMotion's leader
@@ -191,19 +195,7 @@ execute pathogen#infect()
   noremap q; q:
 
   " map escape to remove search highlighting in normal mode
-  if has("gui_running")
-    nnoremap <esc> :noh<cr>
-  else
-    " if we're on the backup server highlighting won't work until we change
-    " the term variable to ansi, but this change has to be made some time
-    " after the vimrc is sourced. setting the TERM env var causes problems
-    " with escape sequences, so we can't do that. setting term here in the
-    " vimrc doesn't cause those problems, but it does't make colors work
-    " properly either.
-    " maybe add some logic so it only sets term the first
-    " time <esc> is pressed? maybe don't worry about it?
-    nnoremap <esc> :set term=ansi<cr>:noh<cr>
-  endif
+  nnoremap <esc> :noh<cr>
 
   " map forward and backward window switching in normal, visual, command
   " pending, and insert modes
