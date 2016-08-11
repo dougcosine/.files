@@ -1,7 +1,11 @@
 SetTitleMatchMode 1
 SetCapsLockState, AlwaysOff
 SetScrollLockState, AlwaysOff
-#IfWinNotActive Anzio Lite -  150.150.0.10
+
+*Capslock::Esc
+*Numlock::Tab
+
+#IfWinNotActive liveServer1
 ^;::^z
 ^q::^x
 ^j::^c
@@ -27,7 +31,4 @@ SetScrollLockState, AlwaysOff
 ^i::^g
 ^e::^d
 ^'::^q
-
-#IfWinActive
-*Capslock::Esc
 
