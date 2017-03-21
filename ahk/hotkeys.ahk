@@ -5,7 +5,7 @@ SetScrollLockState, AlwaysOff
 *Capslock::Esc
 *Numlock::Tab
 
-#IfWinNotActive liveServer1
+#IfWinNotActive liveServer
 ^;::^z
 ^q::^x
 ^j::^c

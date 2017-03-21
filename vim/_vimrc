@@ -16,7 +16,7 @@
   set cinkeys-=0#           "don't reset '#' comment lines to 0 indentation
   set indentkeys-=0#        "don't reset '#' comment lines to 0 indentation
   set mouse=                "disable crutch interaction
-  set fdm=indent            "fold method (how folds are recognized
+  set fdm=indent            "fold method (how folds are recognized)
   set foldignore=           "was '#' allow comment folding
   set clipboard=unnamed     "use windows' clipboard???
   set guioptions-=m         "remove menu bar
@@ -104,6 +104,218 @@ function! s:DiffWithSaved()
 endfunction
 com! DiffSaved call s:DiffWithSaved()
 
+" strips trailing whitespace if b:noStripWhitespace is not set
+" you will want to call noh after this function to turn of highlighting
+" Usage: StripTrailingWhitespace | noh
+fun! StripTrailingWhitespace()
+  if !exists('b:noStripWhitespace')
+    %s/\s\+$//e
+  endif
+endfun
+
+" converts coast confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessCoastConfirmation()
+fun! ProcessCoastConfirmation()
+  silent! %s/^\s*//g
+  silent! g/^$/d
+  silent! %s,^\(\%(\d\+\s\+\)\{3\}[0-9a-zA-Z]\+\)\( .*\n.* \(\S\+\)".*"\),\1\3\2,g
+  silent! %s,^\(\%(\d\+\s\+\)\{3\}[0-9a-zA-Z]\+\)\( .*\n.*\S \)\( \+\d\+\.\d\+\n\)\(.*PVC.*\)\n,\1PVC\2\4\3,g
+  silent! %s/\%(".* \)\@<=\(\S*"\)\(.*\S \)\( *\d\+\.\d\+$\)/\2\1\3/g
+  silent! g/^\d\+ \+\d/normal! J
+  silent! g/Attn:  DOUG COULSON/d
+  silent! v/^\d\+ \+\d/d
+	setlocal noexpandtab
+  silent! v/^$/execute "normal! f cw	\<esc>f .f .f .f .f ./ \\S\\+['\"][^'\"]*$\<cr>ciw		\<esc>/['\"]\<cr>xcw	\<esc>"
+	setlocal expandtab<
+endfun
+
+" converts ryerson confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessRyersonConfirmation()
+fun! ProcessRyersonConfirmation()
+  silent! %s/,//g
+  silent! %s/ RL//g
+  silent! %s,5052 H32 \(B/W FLM\)\@!\(\(.*\n\)\{3}.*B/W FLM\),5052 H32 B/W FLM \2,g
+  silent! g/^$/d
+  silent! v/\d\+ \d\+ PC\|\(\d\+ \d\+ PC.*\n\)\@<=.\|Extended Amount/d
+	setlocal noexpandtab
+  silent! g/^\d\+ \d\+/execute "normal! f r	f .wdwd/\\d\\+\\.\<cr>Jr	p^f df$dt	A	\<esc>pbD\"_xF	pa	\<esc>F wd/\\D\<cr>A				\<esc>PJdf$"
+	setlocal expandtab<
+endfun
+
+" converts nucor confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessNucorConfirmation()
+fun! ProcessNucorConfirmation()
+  silent! %s/,//g
+  silent! v/^[US]1 \d*\|^ \?[A-Z0-9]\+ \d\+'/d
+	setlocal noexpandtab
+  silent! g/^[US]1 \d*/execute "normal! d2wf s		\<esc>/ T\\d\<cr>c2w	\<esc>dF	f r	Pa	\<esc>;r	;DJder	df'r	/ PP\<cr>PDa	\<esc>"
+	setlocal expandtab<
+endfun
+
+"
+" converts Samuel confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessSamuelConfirmation()
+fun! ProcessSamuelConfirmation()
+  let isInvoice = 0
+  if search('Inv date', 'cnw')
+    let isInvoice = 1
+  endif
+  silent! %s/,//g
+  silent! %s/^ *//g
+  silent! v/^\d\+\|^Est Wgt/d
+  silent! g/18201 N.E. PORTAL WAY/d
+  silent! %s/"\? \(RL RDM\|R\|RL\|R\|RD\|RDM\)[ "]/" /g
+  silent! %s/" \(RL RDM\|R\|RL\|R\|RD\|RDM\)\+[ "]/" /g
+  silent! %s/ Plate//g
+	setlocal noexpandtab
+  " if this is an invoice, process one way.  otherwise process as an invoice
+  if isInvoice
+    v/^\d\+SS/d
+		silent! g/^\d/execute "normal! i	\<esc>fS2.$F\"xF s					\<esc>f c2W	\<esc>"
+	else
+    silent! %s/\d\@<= \( *\S*$\)\@=/"/g
+		silent! g/^\d/execute "normal! f cw	\<esc>Jd/\\d\<cr>de^f i	\<esc>plc2w	\<esc>/['\"][^'\"]*$\<cr>dwdBF r	El\"_c/\\d\<cr>			\<esc>pa	\<esc>F/r	dt	F	P"
+	endif
+	"setlocal expandtab<
+endfun
+
+"
+" converts Sapa confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessSapaConfirmation()
+fun! ProcessSapaConfirmation()
+  let isInvoice = 0
+  if search('^Invoice.#', 'cnw')
+    let isInvoice = 1
+  endif
+  silent! %s/,//g
+  silent! %s/ / /g
+  silent! %s/­/-/g
+  silent! %s/\(023974_\d\+\)/\1 CE23974 AL/g
+  silent! %s/\(023973_\d\+\)/\1 CE23973 AL/g
+  silent! g/^\s*$/d
+  silent! %s/^\(\d\+\.\d\+ \)\(.*\n.*\n.*\nLin.Ft:.*\)\D\(\d\+\)$/\1\3 \2/g
+  silent! v/^\d\+\|^Est Wgt/d
+  silent! g/^4249$/d
+  silent! g/^3900 EAST BROADWAY$/d
+  silent! g/^7933 N/d
+  setlocal noexpandtab
+  " if this is an invoice, process one way.  otherwise process as an invoice
+  if isInvoice
+    silent! %s/^\(\d\+\.\d\+ \d\+ \d\+\) .*\(\(\s\S\+\)\{6\}\)$/\1\2/g
+    silent! g/^\d\+\./execute "normal! f.dt r	f ./\\d\\+ LBS\<cr>dwF	pr	f DJ\"_DJ\"_xf \"_Dp^f dt r	f \"_der	f PF s			\<esc>f r	"
+  else
+    silent! g/^\d\+\./execute "normal! f r	/\\(\\d\\+\\/\\d\\+\\/\\d\\+ \\)\\@<=\<cr>d3wF	pF r	deel\"_d/\\d\\+\\.\<cr>Pa	\<esc>2F	ldwf r	pr	$BDF	pa	\<esc>f DT	DJ\"_dW$F \"_DJr	f r	pa	\<esc>lD2F	lyt	^4f	P"
+  endif
+  setlocal expandtab<
+endfun
+
+"
+" converts consumption reports into format that can be imported into
+" excel to compare with a confirmation.  The filename will be the PO
+" number for a different filename, pass a string to be appended after
+" the number but before the extension
+" Usage: call ProcessConsumption(u)
+fun! ProcessConsumption()
+	setlocal noexpandtab
+  silent! %s/^Cd\'A METALS.*\n.*\n//g
+  silent! %s/^.*INCLUDE POs:.*\n.*\n.*\n.*\n.*\n.*\n//g
+  silent! %s/^\(Mo Avg.*\n\).*\n/\1/g
+  silent! %s/^Hgh Mo.*\n.*\n//g
+  silent! g/^\d/d
+  silent! g/^ MS/d
+  silent! g/^\s*$/d
+  silent! g/^ *NEXT: /d
+  silent! g/^ *calculating\.\.\. /d
+  silent! g/^SIZE:/normal! d6lWdWelDJd2eelDJdeElD
+  silent! %s/ \+/	/g
+	setlocal expandtab<
+endfun
+
+"
+" converts PO into format that can be imported into excel to
+" compare with a confirmation.  The filename will be the PO number
+" for a different filename, pass a string to be appended after the
+" number but before the extension
+" Usage: call ProcessPO('u')
+fun! ProcessPO(...)
+  let poNumber = matchstr(getline(1), '\(PO# \)\@<=\d\{6\}')
+  " if an argument was supplied, append it to the PO number
+  if a:0 > 0
+    let poNumber .= a:1
+  endif
+  let fileName = '/Users/Doug/Documents/POs/' . poNumber . '.csv'
+  setlocal noexpandtab
+  silent! g/^ *\d\+ I/normal! J
+  silent! v/^ *\d\+ I/d
+  silent! g//normal! 4|r	2l.8l.21l.5l.8l.9l.10l.11l.7l.2l.11l.7l.9l.15l.
+  silent! %s/^ *//g
+  silent! %s/ *	 */	/g
+  if poNumber != ''
+    execute 'saveas' fileName
+  endif
+	setlocal expandtab<
+endfun
+
+" converts coast confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessCoastConfirmation()
+fun! ProcessInditalInvoice()
+  silent! %s/,//g
+  silent! %s/\d\+\.\d\d\( \d\+\.\d\d\n\).*\n \S* \(.*\)\n/\2\1/g
+  silent! v/EACH\|Freight:/d
+  silent! g/ 0.00$/d
+  setlocal noexpandtab
+  silent! v/Freight:/execute "normal! 2Wdwwdwdb0PI	\<esc>f s		\<esc>f r	f r	f s				\<esc>"
+  silent! g/Freight:/execute "normal! i	1		\<esc>f:cf 						"
+	setlocal expandtab<
+endfun
+
+" converts coast confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessCoastConfirmation()
+fun! ProcessCoastInvoice()
+  silent! %s/['"]//g
+  silent! v/^\d\+ .[A-Z0-9]\+/d
+  setlocal noexpandtab
+  silent! g//execute "normal! f dawr	$2F ?\\d\<cr>a \<esc>P3F dF \"_dF	$F PBi  \<esc>"
+  silent! %s/ /	/g
+	setlocal expandtab<
+endfun
+
+"
+" converts Sapa confirmation into format that can be imported into excel to
+" compare with a PO
+" Usage: call ProcessSapaConfirmation()
+fun! ProcessSapaStuff()
+  silent! %s/,//g
+  silent! g/^\w*$/d
+  silent! v/^\d\+\.\d\+/d
+  silent! g/^/execute "normal! dWelc/\\(\\d\\+\\/\\d\\+\\/\\d\\+ \\)\\@<=\\d\<cr>,\<esc>f r,;D"
+endfun
+
+fun! ProcessQuantity()
+  silent! v/\S/d
+  silent! g//execute 'normal! f	r11AA+-'
+  silent! %y
+endfun
+
+fun! ProcessPrices()
+  silent! v/\S/d
+  silent! g//execute 'normal! Ipf	r$2A'
+  silent! %y
+endfun
+
+fun! ProcessUnitPrices()
+  silent! v/\S/d
+  silent! g//execute 'normal! Ipf	rA'
+  silent! %y
+endfun
+
 " pathogen
 execute pathogen#infect()
 
@@ -142,8 +354,10 @@ execute pathogen#infect()
   noremap  mN N
 
 " autocmds
+  " set noStripWhiteSpace for pdf files
+  autocmd FileType pdf let b:noStripWhitespace=1
   " strip white space from line endings on save
-  au BufWritePre * call StaticViewCall('%s/\s\+$//e') | noh
+  au BufWritePre * call StripTrailingWhitespace() | noh
   " start in insert mode for git commit messages
   au FileType gitcommit 1 | startinsert | :redraw
   " set some cobol extensions
@@ -196,8 +410,10 @@ execute pathogen#infect()
     cnoremap <a-space> <c-c>:simalt ~<cr>
   endif
 
-  " quick edit my vimrc
+  " quick edit my vimrc in new tab
   nnoremap <leader>ek :tabnew $MYVIMRC<cr>
+  " quick edit my vimrc in vertical split
+  nnoremap <leader>vk :vnew $MYVIMRC<cr>
   " quick source my vimrc
   nnoremap <leader>ok :source $MYVIMRC<cr>
 
@@ -216,9 +432,6 @@ execute pathogen#infect()
   noremap  <leader>, <c-w>w
   nnoremap <leader>< <c-w>W
 
-  " map tabclose to match cVim
-  noremap <leader>x :tabclose<cr>
-
   " map f10 to echo the syntax groups the character under the cursor matches
   map <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
       \ . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
@@ -234,21 +447,21 @@ execute pathogen#infect()
 
 " modal operators
   " map escape to leave insert and visual modes and also remove highlighting
-  inoremap <esc> <esc>l:noh<cr>
+  inoremap <esc> <esc>:noh<cr>
   vnoremap <esc> <esc>:noh<cr>
 
 " text movement
   " move line under cursor down one line
-  nnoremap <leader>- ddp
+  nnoremap <leader>- "zdd"zp
   " move line under cursor up one line
-  nnoremap <leader>_ ddkP
+  nnoremap <leader>_ "zddk"zP
 
 " tabs
   nnoremap <leader>k gt
   nnoremap <leader>j gT
   nnoremap <leader>t :tabnew<space>
 
-" text editing
+" general text editing
   " surround word under cursor with various enclosing marks
   nnoremap <leader>" viw<esc>a"<esc>hbi"<esc>lel
   nnoremap <leader>' viw<esc>a'<esc>hbi'<esc>lel
@@ -263,7 +476,6 @@ execute pathogen#infect()
   nnoremap <leader>c  "_c
   nnoremap <leader>s  "_s
   nnoremap <leader>D  "_D
-  nnoremap <leader>DD "_DD
   nnoremap <leader>X  "_X
   nnoremap <leader>C  "_C
   nnoremap <leader>S  "_S
@@ -289,7 +501,14 @@ execute pathogen#infect()
   iabbrev @@ dougcosine@gmail.com
   iabbrev ssig -- <cr>Doug Coulson<cr>dougcosine@gmail.com
 
+" specific text editing
+  " readies price update from excel for anzio
+  nnoremap <c-p> :call ProcessPrices()<cr>
+  nnoremap <c-o> :call ProcessUnitPrices()<cr>
+  nnoremap <c-i> :call ProcessQuantity()<cr>
 
+  " adds title metadata on next line, leave us ready to type the title
+  nnoremap <c-k> /<<no/Title ()<esc>i
 
 
 
@@ -355,4 +574,7 @@ if has("gui_running")
   autocmd VimEnter * if g:screen_size_restore_pos == 1 | call ScreenRestore() | endif
   autocmd VimLeavePre * if g:screen_size_restore_pos == 1 | call ScreenSave() | endif
 endif
+
+" clears highlighting that pops up when vimrc is loaded mid session
+noh
 
