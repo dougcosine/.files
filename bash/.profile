@@ -26,14 +26,13 @@ if [[ $platform == 'mingw' ]]; then
     ":/c/Program Files/Java/jdk1.8.0_45/bin"\
     ":/c/MinGW/bin"\
     ":/c/MinGW/msys/1.0/bin"\
-    ":~/Vim/vim74"\
-    ":/c/Python34"; do
+    ":~/Vim"; do
     if [[ "$PATH" != *"$path"* ]]; then
       export PATH=$PATH:$path
     fi
   done
 
-  export vimExecutable=~/Vim/vim74/gvim.exe
+  export vimExecutable=~/Vim/vim*/gvim.exe
 else
   export vimExecutable=vim
 fi
