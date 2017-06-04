@@ -316,9 +316,6 @@ fun! ProcessUnitPrices()
   silent! %y
 endfun
 
-" pathogen
-execute pathogen#infect()
-
 " EasyMotion
   let g:EasyMotion_smartcase = 1
   let g:EasyMotion_leader_key = 'm'
