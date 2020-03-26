@@ -1,5 +1,8 @@
 " sources
   exec "source " . expand('<sfile>:p:h') . "/vimrc_example.vim"
+  if filereadable(expand('<sfile>:p:h') . "/_cdavimrc.vim")
+    exec "source " . expand('<sfile>:p:h') . "/_cdavimrc.vim"
+  endif
 
 " settings
   behave xterm
@@ -38,14 +41,13 @@
   set fileformats=unix,dos  "no, really! use unix style line endings
   syntax on                 "switch syntax highlighting on
   set hlsearch              "highlight the last used search pattern
-  "use file's location as working directory for shell commands
-  set autochdir
+  set ignorecase            "search case insensitive if all lower, sensitive otherwise
+  set smartcase             "search case insensitive if all lower, sensitive otherwise
+  set autochdir             "use file's location as working directory for shell commands
+  set whichwrap+=bs         "backspace, space, h, and l keys wrap to previous/next line
+  set vb t_vb=              "disable bell
   " allow backspacing over everything in insert mode
   set backspace=indent,eol,start
-  " backspace, space, h, and l keys wrap to previous/next line
-  set whichwrap+=bs
-  " disable bell
-  set vb t_vb=
   " enable the saving and restoring of screen positions.
   let g:screen_size_restore_pos = 1
   " To save and restore screen for each Vim instance.
@@ -113,209 +115,6 @@ fun! StripTrailingWhitespace()
   endif
 endfun
 
-" converts coast confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessCoastConfirmation()
-fun! ProcessCoastConfirmation()
-  silent! %s/^\s*//g
-  silent! g/^$/d
-  silent! %s,^\(\%(\d\+\s\+\)\{3\}[0-9a-zA-Z]\+\)\( .*\n.* \(\S\+\)".*"\),\1\3\2,g
-  silent! %s,^\(\%(\d\+\s\+\)\{3\}[0-9a-zA-Z]\+\)\( .*\n.*\S \)\( \+\d\+\.\d\+\n\)\(.*PVC.*\)\n,\1PVC\2\4\3,g
-  silent! %s/\%(".* \)\@<=\(\S*"\)\(.*\S \)\( *\d\+\.\d\+$\)/\2\1\3/g
-  silent! g/^\d\+ \+\d/normal! J
-  silent! g/Attn:  DOUG COULSON/d
-  silent! v/^\d\+ \+\d/d
-	setlocal noexpandtab
-  silent! v/^$/execute "normal! f cw	\<esc>f .f .f .f .f ./ \\S\\+['\"][^'\"]*$\<cr>ciw		\<esc>/['\"]\<cr>xcw	\<esc>"
-	setlocal expandtab<
-endfun
-
-" converts ryerson confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessRyersonConfirmation()
-fun! ProcessRyersonConfirmation()
-  silent! %s/,//g
-  silent! %s/ RL//g
-  silent! %s,5052 H32 \(B/W FLM\)\@!\(\(.*\n\)\{3}.*B/W FLM\),5052 H32 B/W FLM \2,g
-  silent! g/^$/d
-  silent! v/\d\+ \d\+ PC\|\(\d\+ \d\+ PC.*\n\)\@<=.\|Extended Amount/d
-	setlocal noexpandtab
-  silent! g/^\d\+ \d\+/execute "normal! f r	f .wdwd/\\d\\+\\.\<cr>Jr	p^f df$dt	A	\<esc>pbD\"_xF	pa	\<esc>F wd/\\D\<cr>A				\<esc>PJdf$"
-	setlocal expandtab<
-endfun
-
-" converts nucor confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessNucorConfirmation()
-fun! ProcessNucorConfirmation()
-  silent! %s/,//g
-  silent! v/^[US]1 \d*\|^ \?[A-Z0-9]\+ \d\+'/d
-	setlocal noexpandtab
-  silent! g/^[US]1 \d*/execute "normal! d2wf s		\<esc>/ T\\d\<cr>c2w	\<esc>dF	f r	Pa	\<esc>;r	;DJder	df'r	/ PP\<cr>PDa	\<esc>"
-	setlocal expandtab<
-endfun
-
-"
-" converts Samuel confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessSamuelConfirmation()
-fun! ProcessSamuelConfirmation()
-  let isInvoice = 0
-  if search('Inv date', 'cnw')
-    let isInvoice = 1
-  endif
-  silent! %s/,//g
-  silent! %s/^ *//g
-  silent! v/^\d\+\|^Est Wgt/d
-  silent! g/18201 N.E. PORTAL WAY/d
-  silent! %s/"\? \(RL RDM\|R\|RL\|R\|RD\|RDM\)[ "]/" /g
-  silent! %s/" \(RL RDM\|R\|RL\|R\|RD\|RDM\)\+[ "]/" /g
-  silent! %s/ Plate//g
-	setlocal noexpandtab
-  " if this is an invoice, process one way.  otherwise process as an invoice
-  if isInvoice
-    v/^\d\+SS/d
-		silent! g/^\d/execute "normal! i	\<esc>fS2.$F\"xF s					\<esc>f c2W	\<esc>"
-	else
-    silent! %s/\d\@<= \( *\S*$\)\@=/"/g
-		silent! g/^\d/execute "normal! f cw	\<esc>Jd/\\d\<cr>de^f i	\<esc>plc2w	\<esc>/['\"][^'\"]*$\<cr>dwdBF r	El\"_c/\\d\<cr>			\<esc>pa	\<esc>F/r	dt	F	P"
-	endif
-	"setlocal expandtab<
-endfun
-
-"
-" converts Sapa confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessSapaConfirmation()
-fun! ProcessSapaConfirmation()
-  let isInvoice = 0
-  if search('^Invoice.#', 'cnw')
-    let isInvoice = 1
-  endif
-  silent! %s/,//g
-  silent! %s/ / /g
-  silent! %s/­/-/g
-  silent! %s/\(023974_\d\+\)/\1 CE23974 AL/g
-  silent! %s/\(023973_\d\+\)/\1 CE23973 AL/g
-  silent! g/^\s*$/d
-  silent! %s/^\(\d\+\.\d\+ \)\(.*\n.*\n.*\nLin.Ft:.*\)\D\(\d\+\)$/\1\3 \2/g
-  silent! v/^\d\+\|^Est Wgt/d
-  silent! g/^4249$/d
-  silent! g/^3900 EAST BROADWAY$/d
-  silent! g/^7933 N/d
-  setlocal noexpandtab
-  " if this is an invoice, process one way.  otherwise process as an invoice
-  if isInvoice
-    silent! %s/^\(\d\+\.\d\+ \d\+ \d\+\) .*\(\(\s\S\+\)\{6\}\)$/\1\2/g
-    silent! g/^\d\+\./execute "normal! f.dt r	f ./\\d\\+ LBS\<cr>dwF	pr	f DJ\"_DJ\"_xf \"_Dp^f dt r	f \"_der	f PF s			\<esc>f r	"
-  else
-    silent! g/^\d\+\./execute "normal! f r	/\\(\\d\\+\\/\\d\\+\\/\\d\\+ \\)\\@<=\<cr>d3wF	pF r	deel\"_d/\\d\\+\\.\<cr>Pa	\<esc>2F	ldwf r	pr	$BDF	pa	\<esc>f DT	DJ\"_dW$F \"_DJr	f r	pa	\<esc>lD2F	lyt	^4f	P"
-  endif
-  setlocal expandtab<
-endfun
-
-"
-" converts consumption reports into format that can be imported into
-" excel to compare with a confirmation.  The filename will be the PO
-" number for a different filename, pass a string to be appended after
-" the number but before the extension
-" Usage: call ProcessConsumption(u)
-fun! ProcessConsumption()
-	setlocal noexpandtab
-  silent! %s/^Cd\'A METALS.*\n.*\n//g
-  silent! %s/^.*INCLUDE POs:.*\n.*\n.*\n.*\n.*\n.*\n//g
-  silent! %s/^\(Mo Avg.*\n\).*\n/\1/g
-  silent! %s/^Hgh Mo.*\n.*\n//g
-  silent! g/^\d/d
-  silent! g/^ MS/d
-  silent! g/^\s*$/d
-  silent! g/^ *NEXT: /d
-  silent! g/^ *calculating\.\.\. /d
-  silent! g/^SIZE:/normal! d6lWdWelDJd2eelDJdeElD
-  silent! %s/ \+/	/g
-	setlocal expandtab<
-endfun
-
-"
-" converts PO into format that can be imported into excel to
-" compare with a confirmation.  The filename will be the PO number
-" for a different filename, pass a string to be appended after the
-" number but before the extension
-" Usage: call ProcessPO('u')
-fun! ProcessPO(...)
-  let poNumber = matchstr(getline(1), '\(PO# \)\@<=\d\{6\}')
-  " if an argument was supplied, append it to the PO number
-  if a:0 > 0
-    let poNumber .= a:1
-  endif
-  let fileName = '/Users/Doug/Documents/POs/' . poNumber . '.csv'
-  setlocal noexpandtab
-  silent! g/^ *\d\+ I/normal! J
-  silent! v/^ *\d\+ I/d
-  silent! g//normal! 4|r	2l.8l.21l.5l.8l.9l.10l.11l.7l.2l.11l.7l.9l.15l.
-  silent! %s/^ *//g
-  silent! %s/ *	 */	/g
-  if poNumber != ''
-    execute 'saveas' fileName
-  endif
-	setlocal expandtab<
-endfun
-
-" converts coast confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessCoastConfirmation()
-fun! ProcessInditalInvoice()
-  silent! %s/,//g
-  silent! %s/\d\+\.\d\d\( \d\+\.\d\d\n\).*\n \S* \(.*\)\n/\2\1/g
-  silent! v/EACH\|Freight:/d
-  silent! g/ 0.00$/d
-  setlocal noexpandtab
-  silent! v/Freight:/execute "normal! 2Wdwwdwdb0PI	\<esc>f s		\<esc>f r	f r	f s				\<esc>"
-  silent! g/Freight:/execute "normal! i	1		\<esc>f:cf 						"
-	setlocal expandtab<
-endfun
-
-" converts coast confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessCoastConfirmation()
-fun! ProcessCoastInvoice()
-  silent! %s/['"]//g
-  silent! v/^\d\+ .[A-Z0-9]\+/d
-  setlocal noexpandtab
-  silent! g//execute "normal! f dawr	$2F ?\\d\<cr>a \<esc>P3F dF \"_dF	$F PBi  \<esc>"
-  silent! %s/ /	/g
-	setlocal expandtab<
-endfun
-
-"
-" converts Sapa confirmation into format that can be imported into excel to
-" compare with a PO
-" Usage: call ProcessSapaConfirmation()
-fun! ProcessSapaStuff()
-  silent! %s/,//g
-  silent! g/^\w*$/d
-  silent! v/^\d\+\.\d\+/d
-  silent! g/^/execute "normal! dWelc/\\(\\d\\+\\/\\d\\+\\/\\d\\+ \\)\\@<=\\d\<cr>,\<esc>f r,;D"
-endfun
-
-fun! ProcessQuantity()
-  silent! v/\S/d
-  silent! g//execute 'normal! f	r11AA+-'
-  silent! %y
-endfun
-
-fun! ProcessPrices()
-  silent! v/\S/d
-  silent! g//execute 'normal! Ipf	r$2A'
-  silent! %y
-endfun
-
-fun! ProcessUnitPrices()
-  silent! v/\S/d
-  silent! g//execute 'normal! Ipf	rA'
-  silent! %y
-endfun
-
 " pathogen
 execute pathogen#infect()
 
@@ -345,13 +144,13 @@ execute pathogen#infect()
   nnoremap m<  ``<``
   nnoremap mgu ``gu``
   nnoremap mgU ``gU``
-  nmap     /   <Plug>(easymotion-sn)
-  nmap     n   <Plug>(easymotion-next)
-  nmap     N   <Plug>(easymotion-prev)
+  " nmap     /   <Plug>(easymotion-sn)
+  " nmap     n   <Plug>(easymotion-next)
+  " nmap     N   <Plug>(easymotion-prev)
   " remap vanilla search commands
-  noremap  m/ /
-  noremap  mn n
-  noremap  mN N
+  " noremap  m/ /
+  " noremap  mn n
+  " noremap  mN N
 
 " autocmds
   " set noStripWhiteSpace for pdf files
@@ -412,6 +211,8 @@ execute pathogen#infect()
 
   " quick edit my vimrc in new tab
   nnoremap <leader>ek :tabnew $MYVIMRC<cr>
+  " quick edit cda vimrc in new tab
+  nnoremap <leader>eck :tabnew ~/_cdavimrc.vim<cr>
   " quick edit my vimrc in vertical split
   nnoremap <leader>vk :vnew $MYVIMRC<cr>
   " quick source my vimrc
@@ -459,6 +260,8 @@ execute pathogen#infect()
 " tabs
   nnoremap <leader>k gt
   nnoremap <leader>j gT
+  nnoremap <leader>> :tabmove +1<cr>
+  nnoremap <leader>< :tabmove -1<cr>
   nnoremap <leader>t :tabnew<space>
 
 " general text editing
